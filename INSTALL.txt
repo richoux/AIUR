@@ -1,0 +1,68 @@
+/////////////////////
+// To install AIUR //
+/////////////////////
+
+0) If you have a released AIUR.dll file, then you can skip the following parts. goto 4;
+
+1) GET VC++ 2008
+
+- Download and install Visual C++ 2008 Studio Express Edition (or the current version). Don't worry, it's free.
+
+
+2) DOWNLOAD LIBRAIRIES AND INSTALL THEM
+
+- Download BWAPI (http://code.google.com/p/bwapi/) and unzip the file.
+- Download Boost (www.boost.org) and unzip the file.
+- Read the INSTALL file from your Boost directory to see how to finish Boost installation (usually, using a Command Prompt, go to your boost directory and enter the command "bootstrap" then ".\b2").
+- Add 2 environment variables:
+	* BWAPI_DIR - with as value your BWAPI path. Warning: no space in the pathname.
+	* BOOST_DIR - with as value your Boost path. Warning: no space in the pathname.
+  On Windows 7, to create an environment variable, do the following:
+	right click on your computer icon > Properties > Advanced system settings > Advanced > Environment Variables > New (lower part)
+- This version of AIUR uses BWAPI 3.7.4 and Boost 1.53.0. If you use a different version of boost, please modify the VC++ AiurProject properly (Project->Aiur Properties->Linker->Input)
+
+3) COMPILING THE CODE
+
+- In the AIUR directory, double-click on AiurProject.sln (it should run VC++). 
+- Under VC++, be sure that "Release" is chosen in the first drop-down menu, and not "Debug".
+- Compile with Build -> Build Aiur. It must create a Release directory into your Aiur directory, with (among others) the file AIUR.dll.
+
+
+4) DOWNLOAD AND INSTALL LEGAL STUFFS ;)
+
+
+- Download Chaoslauncher (http://winner.cspsx.de/Starcraft/). Current version today (2011/06/19) is 0.8.7.
+- Be sure your StarCraft Broodwar is patched to be the 1.16.1 version. Otherwise, download the patch available on Blizzard web page and install it.
+
+
+5) COPY THE RIGHT FILES
+
+- Copy all files from BWAPI x.y.z\Chaoslauncher into the Chaoslauncher directory.
+- Copy all files from BWAPI x.y.z\Windows into your Windows directory.
+- Copy all files from BWAPI x.y.z\Starcraft into your Starcraft directory.
+
+
+6) COPY AIUR.DLL AND STUFF
+
+- From your AIUR\Release directory, copy the file AIUR.dll into your Starcraft\bwapi-data\AI directory
+- Copy the file AIUR\directories.txt into your Starcraft\bwapi-data directory
+
+
+7) ALMOST DONE!
+
+- Launch Chaosloader.exe (in the Chaosloader directory of course).
+- select BWAPI Injector (Release).
+- If it is the first time you do this, click on the "Config" button once you have selected BWAPI Injector (Release), and change the line "ai = ..." (all lines starting with ";" are commented) by "ai = bwapi-data\AI\AIUR.dll".
+
+
+8) ENJOY!
+
+- Be sure StarCraft 1.16.1 is chosen in the drop-down menu, and click on the Start button!
+- To see AIUR playing against the Blizzard AI, launch a single player custom game.
+- To play against AIUR, you can:
+	* play via a Local Area Network game, with 2 computers or one computer virtualizing two windows. The author recommands this way, it seems more stable.
+	* play via a Local PC game with one computer, if you select "Starcraft Multi-Instance" with Chaoslauncher before running the game. 
+
+
+X) TROUBLES?
+It is the first time you play with Aiur on a given map and the game freezes at the very beginning? This is not a crash/bug, it is perfectly normal. If you have selected a map Aiur never played before, it analyses it before launching the game. It can take 1 to 3 minutes, depending of your machine. This will happen just once per new map; the result of the analysis is stored in a file in your Starcraft\bwapi-data\BWTA directory. If you don't want to wait, you can download the map pool used by the AIIDE 2011-2012 contests as well as map analysises here: http://code.google.com/p/aiurproject/downloads/list
