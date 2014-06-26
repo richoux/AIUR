@@ -33,7 +33,7 @@ void AiurModule::onStart()
 	if (Broodwar->isReplay()) return;
 
 	Broodwar->setTextSize(0);
-	Broodwar->setLocalSpeed(3);
+	Broodwar->setLocalSpeed(0);
 
 	// Thanks for the trick, Gabriel!
 	//Broodwar->setLatCom(false);
@@ -297,7 +297,7 @@ void AiurModule::onStart()
 					++i;
 			}
 
-			int numberOfGames = dataGame[0 + 11*shift];
+			int numberOfGames = dataGame[dataSizeCopy * shift];
 
 			// After 1000 games, stop collecting statistic data
 			if( numberOfGames < 1000 )
@@ -316,8 +316,12 @@ void AiurModule::onStart()
 			//if( numberOfGames >= 10 )
 			//{
 				for( int i = 0; i < dataSizeCopy; ++i )
-					dataGameCopy[i] = dataGame[i + 11*shift];
-				moodManager->initialize( dataGameCopy );
+					dataGameCopy[i] = dataGame[i + dataSizeCopy * shift];
+
+				if( numberOfGames >= moodManager->getNumberMoods() )
+					moodManager->initialize( dataGameCopy );
+				else
+					moodManager->initializeRoundRobin( dataGameCopy );
 			//}
 			//else
 			//{
@@ -383,10 +387,10 @@ void AiurModule::onStart()
 	//}
 
 	// Last, if we play on Destination, we don't FE - mining the fake mineral doesn't work...
-	if( Broodwar->mapHash() == hashMap.hash("Destination") && moodManager->getMood() == MoodManager::MoodData::FastExpo )
-	{
-		moodManager->setAnotherRandomMood();
-	}
+	//if( Broodwar->mapHash() == hashMap.hash("Destination") && moodManager->getMood() == MoodManager::MoodData::FastExpo )
+	//{
+	//	moodManager->setAnotherRandomMood();
+	//}
 
 	// Defensive mood is only now to face a Zerg rush. do not select it as a starting mood.
 	if( moodManager->getMood() == MoodManager::MoodData::Defensive )
@@ -471,10 +475,11 @@ void AiurModule::onEnd(bool isWinner)
 	{
 		if( inGame.is_open() )
 		{
+			const int dataSizeCopy = moodManager->getNumberMoods() * 2 + 1;
 			int shift = BWTA::getStartLocations().size() - 2;
-			++dataGame[0 + 11*shift];
+			++dataGame[dataSizeCopy * shift];
 			int win		= isWinner ? 0 : 1;
-			int index	= moodManager->getFirstMoodRank()*2 + win + 1 + 11*shift;
+			int index	= moodManager->getFirstMoodRank()*2 + win + 1 + ( dataSizeCopy * shift );
 
 			// DEPRECATED: Take only into account games where we didn't win after switching to Defensive mood.
 			//if( !hasSwitchedToDefensive || !isWinner )

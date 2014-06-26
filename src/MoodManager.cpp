@@ -55,6 +55,15 @@ void MoodManager::initialize()
 	this->setMoodPlan();
 }
 
+void MoodManager::initialize(MoodManager::MoodData::Mood mood)
+{
+	randomMood				= new Random( moodData.numberMoods );
+	moodData.mood			= mood;
+	moodData.previousMood	= mood;
+	moodData.firstMood		= mood;
+	this->setMoodPlan();
+}
+
 void MoodManager::initialize( int *data )
 {
 	randomMood				= new Random( data, moodData.numberMoods );
@@ -64,12 +73,18 @@ void MoodManager::initialize( int *data )
 	this->setMoodPlan();
 }
 
-void MoodManager::initialize(MoodManager::MoodData::Mood mood)
+void MoodManager::initializeRoundRobin( int *data )
 {
-	randomMood				= new Random( moodData.numberMoods );
-	moodData.mood			= mood;
-	moodData.previousMood	= mood;
-	moodData.firstMood		= mood;
+	for( int i = 1; i < moodData.numberMoods * 2 + 1 ; i += 2 )
+		if( data[i] == 0 && data[i+1] == 0 )
+			data[i] = 1;
+		else
+			data[i]	= 0;
+
+	randomMood				= new Random( data, moodData.numberMoods, true );
+	moodData.mood			= (MoodData::Mood)randomMood->nextInt();
+	moodData.previousMood	= moodData.mood;
+	moodData.firstMood		= moodData.mood;
 	this->setMoodPlan();
 }
 

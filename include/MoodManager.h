@@ -83,8 +83,9 @@ public:
 	void			setInformationManager	(InformationManager*);
 	void			setMood					(MoodData::Mood);
 	void			initialize				();
-	void			initialize				(int*);
 	void			initialize				(MoodData::Mood);
+	void			initialize				(int*);
+	void			initializeRoundRobin	(int*);
 	void			setRandomMood			(void);
 	void			setAnotherRandomMood	(void);
 	void			update					(void);
