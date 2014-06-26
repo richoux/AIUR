@@ -1,7 +1,7 @@
 /*
 * The Artificial Intelligence Using Randomness (AIUR) is an AI for StarCraft: Broodwar, 
 * aiming to be unpredictable thanks to some stochastic behaviors. 
-* Please visit http://code.google.com/p/aiurproject/ for further information.
+* Please visit https://github.com/AIUR-group/AIUR for further information.
 * 
 * Copyright (C) 2011 - 2014 Florian Richoux
 *
@@ -205,7 +205,7 @@ void AiurModule::onStart()
 
 	// StarCraft maps are from 2 till 8 players.
 	// But just in case some dude create a map 
-	// with more than 8 starting spot
+	// with more than 8 starting spots
 	if( BWTA::getStartLocations().size() > 8 )
 	{
 		moodManager->initialize();

@@ -1,7 +1,7 @@
 /*
 * The Artificial Intelligence Using Randomness (AIUR) is an AI for StarCraft: Broodwar, 
 * aiming to be unpredictable thanks to some stochastic behaviors. 
-* Please visit http://code.google.com/p/aiurproject/ for further information.
+* Please visit https://github.com/AIUR-group/AIUR for further information.
 * 
 * Copyright (C) 2011 - 2014 Florian Richoux
 *
