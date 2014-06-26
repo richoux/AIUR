@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Aiur : AIUR (Artificial Intelligence Using Randomness) is an AI for StarCraft: Brood War." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Aiur</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/AIUR-group/AIUR">View on GitHub</a>
+
+          <h1 id="project_title">Aiur</h1>
+          <h2 id="project_tagline">AIUR (Artificial Intelligence Using Randomness) is an AI for StarCraft: Brood War.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/AIUR-group/AIUR/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/AIUR-group/AIUR/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="aiur-21" class="anchor" href="#aiur-21"><span class="octicon octicon-link"></span></a>AIUR 2.1</h1>
+
+<p>AIUR (Artificial Intelligence Using Randomness) is an AI for StarCraft: Brood War.</p>
+
+<p>The main idea is to be unpredictable by making some stochastic choices. The AI starts a game with a "mood" randomly picked up among 5 moods, dictating some behaviors (aggressive, fast expand, macro-game, ...). In addition, some other choices (productions, timing attacks, early aggressions, ...) are also taken under random conditions.</p>
+
+<p>Learning is an essential part of AIUR. For this, it uses persistent I/O files system to record which moods are efficient against a given opponent, in order to modify the probability distribution for the mood selection.  </p>
+
+<h2>
+<a name="whats-new-since-aiidecig-2012-aiur-20" class="anchor" href="#whats-new-since-aiidecig-2012-aiur-20"><span class="octicon octicon-link"></span></a>What's new since AIIDE/CIG 2012 (AIUR 2.0)?</h2>
+
+<ul>
+<li>We now save if, against a given opponent, the selected mood led or not to a victory according to the map size (i.e., the number of starting points). AIUR can now realize that a given mood is, for instance, efficient on a small map but not on a bigger one. This helps the bot to sharply select good moods, even if this selection is still random according to a distribution modified by our saved information.</li>
+<li>Modify the Agressive mood into a fast drop zealot.</li>
+<li>Add a heuristic to focus enemy units during attacks (to be improved in fact).</li>
+<li>Improve the rush Photon to be more stealthy.</li>
+</ul><h2>
+<a name="scientific-papers" class="anchor" href="#scientific-papers"><span class="octicon octicon-link"></span></a>Scientific papers</h2>
+
+<ul>
+<li>Santiago Ontañón, Gabriel Synnaeve, Alberto Uriarte, Florian Richoux, David Churchill and Mike Preuss. [<img src="http://pagesperso.lina.univ-nantes.fr/%7Erichoux-f/publications/tciaig13.pdf" alt="A Survey of Real-Time Strategy Game AI Research and Competition in StarCraft">], Transactions on Computational Intelligence and AI in Games, IEEE, 2013.</li>
+</ul><h2>
+<a name="competitions-and-ladders" class="anchor" href="#competitions-and-ladders"><span class="octicon octicon-link"></span></a>Competitions and ladders</h2>
+
+<p>AIUR participates to annual AIIDE and CIG tournaments since 2011, and is currently running on [<img src="http://bots-stats.krasi0.com" alt="krasi0's Broodwar bot ladder">] and on the [<img src="http://www.sscaitournament.com" alt="Student StarCraft AI Tournament">].</p>
+
+<h3>
+<a name="results" class="anchor" href="#results"><span class="octicon octicon-link"></span></a>Results:</h3>
+
+<h4>
+<a name="2013" class="anchor" href="#2013"><span class="octicon octicon-link"></span></a>2013</h4>
+
+<ul>
+<li>[<img src="http://webdocs.cs.ualberta.ca/%7Ecdavid/starcraftaicomp/index.shtml" alt="AIIDE 2013">]: 3rd</li>
+<li>
+<a href="no%20I/O%20systems"><img src="http://ls11-www.cs.uni-dortmund.de/rts-competition/starcraft-cig2013" alt="CIG 2013"></a>: 3rd 
+#### 2012</li>
+<li>[<img src="http://webdocs.cs.ualberta.ca/%7Ecdavid/starcraftaicomp/index.shtml" alt="AIIDE 2012">]: 2nd</li>
+<li>
+<a href="no%20I/O%20systems"><img src="http://ls11-www.cs.uni-dortmund.de/rts-competition/starcraft-cig2012" alt="CIG 2012"></a>: 3rd
+#### 2011
+(no I/O systems in 2011)</li>
+<li>[<img src="http://skatgame.net/mburo/sc2011/" alt="AIIDE 2011">]: 3rd</li>
+<li>[<img src="http://ls11-www.cs.uni-dortmund.de/rts-competition/starcraft-cig2011" alt="CIG 2011">]: 5th</li>
+</ul><p>Contact: florian -dot- richoux -at- univ -dash- nantes -dot- fr</p>
+
+<h2>
+<a name="videos" class="anchor" href="#videos"><span class="octicon octicon-link"></span></a>Videos</h2>
+
+<h3>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h3>
+
+<p>The first and so far the only demo of AIUR</p>
+
+<p><a href="http://www.youtube.com/watch?v=sb8VtBnAK2M"><img src="http://img.youtube.com/vi/sb8VtBnAK2M/0.jpg" alt="AIUR demo"></a></p>
+
+<h3>
+<a name="aiur-vs-human" class="anchor" href="#aiur-vs-human"><span class="octicon octicon-link"></span></a>AIUR vs Human</h3>
+
+<p>Two games against Bakuryu. Unfortunately, AIUR chose some cheese/daring strategies, so these games are not regular macro-games.</p>
+
+<p><a href="http://www.youtube.com/watch?v=HJSjcIVvhVU"><img src="http://img.youtube.com/vi/HJSjcIVvhVU/0.jpg" alt="Game 1"></a>
+<a href="http://www.youtube.com/watch?v=ehDDTT0wsC4"><img src="http://img.youtube.com/vi/ehDDTT0wsC4/0.jpg" alt="Game 2"></a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Aiur maintained by <a href="https://github.com/AIUR-group">AIUR-group</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
