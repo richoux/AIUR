@@ -27,6 +27,7 @@
 #include <ctime>
 #include <process.h>
 #include <vector>
+#include <algorithm>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/discrete_distribution.hpp>
 
@@ -47,6 +48,9 @@ public:
 private:
 	int		maxInt;
 	int		lastInt;
+	double	epsilon;
+
+	std::vector<double> distrib;
 
 	boost::random::discrete_distribution<>	random;
 	boost::random::mt19937					randGen;

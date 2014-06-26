@@ -26,6 +26,7 @@ Random::Random()
 {
 	maxInt	= 0;
 	lastInt	= 0;
+	epsilon = 0.005;
 	randGen.seed( static_cast<unsigned int>(std::time(NULL) + _getpid() ) );
 }
 
@@ -37,6 +38,7 @@ Random::Random( int maxInt )
 
 	this->maxInt	= maxInt;
 	lastInt			= 0;
+	epsilon			= 0.005;
 	boost::random::discrete_distribution<>::param_type pt( proba );
 	random.param( pt );
 	randGen.seed( static_cast<unsigned int>(std::time(NULL) + _getpid() ) );
@@ -46,6 +48,8 @@ Random::Random( int *data, int numberMoods )
 {
 	maxInt	= numberMoods;
 	lastInt	= 0;
+	epsilon = 0.005;
+	distrib( std::vector<double>( numberMoods, 0 ) );
 	randGen.seed( static_cast<unsigned int>(std::time(NULL) + _getpid() ) );
 	this->setDistribution( data, numberMoods );
 }
@@ -60,18 +64,33 @@ std::vector<double> Random::getDistribution()
 void Random::setDistribution( int *data, int numberMoods )
 {
 	int numberGames = data[0];
-	std::vector<double> distrib;
+	std::vector<double> empirical_means;
 	double temp;
 
 	for( int i = 0; i < numberMoods; ++i )
+		empirical_means.push_back( (double)data[i*2+1] / (data[i*2+1] + data[i*2+2]) );
+
+	double max = std::max_element( empirical_means.begin(), empirical_means.end() );
+
+	for( int i = 0; i < numberMoods; ++i )
 	{
-		temp = 3*data[i*2+1] - 2*data[i*2+2];
-		temp /= numberGames;
-		temp += ( 1.0 / numberMoods );
-		if( temp < 0 )
-			temp = 0;
-		distrib.push_back( temp );
+		if( empirical_means.at(i) == max )
+			temp = 1 - epsilon + (epsilon / numberMoods);
+		else
+			temp = epsilon / numberMoods;
+		distrib.at(i) = temp;
 	}
+
+	// old way to compute the distribution
+	//for( int i = 0; i < numberMoods; ++i )
+	//{
+	//	temp = 3*data[i*2+1] - 2*data[i*2+2];
+	//	temp /= numberGames;
+	//	temp += ( 1.0 / numberMoods );
+	//	if( temp < 0 )
+	//		temp = 0;
+	//	distrib.push_back( temp );
+	//}
 
 	// boost::random::discrete_distribution auto-normalizes proba
 	boost::random::discrete_distribution<>::param_type pt( distrib );
@@ -105,16 +124,17 @@ int Random::nextInt()
 */
 int Random::nextAnotherInt()
 {
-	int random;
 	int last = lastInt;
-	int limit = 0;
+	double backup = distrib.at( last );
+	distrib.at( last ) = 0.;
+	boost::random::discrete_distribution<>::param_type pt( distrib );
+	random.param( pt );
 
-	do
-	{
-		random = nextInt();
-		++limit;
-	}
-	while ( random == last && limit < 100 );
+	lastInt = random( randGen );
 
-	return random;
+	distrib.at( last ) = backup;
+	boost::random::discrete_distribution<>::param_type pt( distrib );
+	random.param( pt );
+
+	return lastInt;
 }
