@@ -318,7 +318,8 @@ void AiurModule::onStart()
 				for( int i = 0; i < dataSizeCopy; ++i )
 					dataGameCopy[i] = dataGame[i + dataSizeCopy * shift];
 
-				if( numberOfGames >= moodManager->getNumberMoods() )
+				// Tyr each mood twice
+				if( numberOfGames >= moodManager->getNumberMoods()*2 )
 					moodManager->initialize( dataGameCopy );
 				else
 					moodManager->initializeRoundRobin( dataGameCopy );

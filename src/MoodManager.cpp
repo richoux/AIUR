@@ -76,7 +76,7 @@ void MoodManager::initialize( int *data )
 void MoodManager::initializeRoundRobin( int *data )
 {
 	for( int i = 1; i < moodData.numberMoods * 2 + 1 ; i += 2 )
-		if( data[i] == 0 && data[i+1] == 0 )
+		if( data[i] + data[i+1] < 2 )
 			data[i] = 1;
 		else
 			data[i]	= 0;

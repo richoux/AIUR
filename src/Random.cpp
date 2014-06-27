@@ -46,7 +46,7 @@ Random::Random( int *data, int numberMoods, bool roundRobin )
 {
 	maxInt	= numberMoods;
 	lastInt	= 0;
-	epsilon = 0.05;
+	epsilon = 0.1;
 	distrib = std::vector<double>( numberMoods, 0 );
 	randGen.seed( static_cast<unsigned int>(std::time(NULL) + _getpid() ) );
 	this->setDistribution( data, numberMoods, roundRobin );
