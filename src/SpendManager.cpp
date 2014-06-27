@@ -272,7 +272,7 @@ void SpendManager::update()
 			buildOrderManager->build(1, UnitTypes::Protoss_Cybernetics_Core, 65);
 		}
 
-		if( ( moodManager->getMood() == MoodManager::MoodData::Defensive && Broodwar->getFrameCount() < 13000 )
+		if( ( moodManager->getMood() == MoodManager::MoodData::Defensive && Broodwar->getFrameCount() < 12000 )
 			// TOFIX: Have some freeing tile problems
 			//|| 
 			//( ( underAttackManager->isUnderAttack() || defenseManager->isDefending() ) && armyManager->enemyDPS() > armyManager->myDPS() ) 

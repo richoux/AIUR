@@ -932,7 +932,7 @@ void AiurModule::onFrame()
 		}
 
 		if( moodManager->getMood() == MoodManager::MoodData::Defensive )
-			baseTimeToExpand = 10000;
+			baseTimeToExpand = 13500;
 		else
 			baseTimeToExpand = 8000;
 
@@ -949,7 +949,7 @@ void AiurModule::onFrame()
 		// if we switched to a defensive mood and we are far in the game (i.e. 13000 frames), 
 		// or if we have a DPS of at least 12, then set a macro mood
 		if( moodManager->getMood() == MoodManager::MoodData::Defensive && 
-			moodManager->getPreviousMood() != MoodManager::MoodData::Defensive && 
+			//moodManager->getPreviousMood() != MoodManager::MoodData::Defensive && 
 			( Broodwar->getFrameCount() >= 13000 || armyManager->myDPStoGround() > 12 ) )
 		{
 			moodManager->setMood( MoodManager::MoodData::Macro );
