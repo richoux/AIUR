@@ -493,7 +493,7 @@ void AiurModule::onEnd(bool isWinner)
 					index = moodManager->getFirstMoodRank()*2 + 2 + ( dataSizeCopy * shift );
 			}
 			else
-				index = ((int)moodManager->getMood())*2 + win + 1 + ( dataSizeCopy * shift );
+				index = moodManager->getFirstMoodRank()*2 + win + 1 + ( dataSizeCopy * shift );
 
 			// DEPRECATED: Take only into account games where we didn't win after switching to Defensive mood.
 			//if( !hasSwitchedToDefensive || !isWinner )
@@ -1003,7 +1003,7 @@ void AiurModule::onFrame()
 		Broodwar->drawTextScreen(490,210,"Distrib: ");
 		std::vector<double> distrib = moodManager->getDistribution();
 		for( unsigned int i = 0; i < distrib.size(); ++i )
-			Broodwar->drawTextScreen(490 + i*30,220,"%1.2f ", distrib[i]*10);
+			Broodwar->drawTextScreen(450 + i*30,220,"%1.2f ", distrib[i]*10);
 
 		diff = compteur.GetTimeFromStart();
 		if (Broodwar->getFrameCount() > 10)

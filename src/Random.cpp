@@ -32,14 +32,14 @@ Random::Random()
 
 Random::Random( int maxInt )
 {
-	std::vector<double>	proba;
 	for( int i = 0; i < maxInt; ++i)
-		proba.push_back(1.0 / maxInt);
+		distrib.push_back(1.0 / maxInt);
 
 	this->maxInt	= maxInt;
 	lastInt			= 0;
 	epsilon			= 0.005;
-	boost::random::discrete_distribution<>::param_type pt( proba );
+
+	boost::random::discrete_distribution<>::param_type pt( distrib );
 	random.param( pt );
 	randGen.seed( static_cast<unsigned int>(std::time(NULL) + _getpid() ) );
 }
@@ -68,9 +68,9 @@ void Random::setDistribution( int *data, int numberMoods, bool roundRobin )
 		for( int i = 1; i < numberMoods * 2 + 1; i += 2 )
 		{
 			if( data[i] == 1 )
-				distrib.at(i) = 1;
+				distrib.at( (i-1)/2 ) = 1;
 			else
-				distrib.at(i) = 0;
+				distrib.at( (i-1)/2 ) = 0;
 		}
 	}
 	else
