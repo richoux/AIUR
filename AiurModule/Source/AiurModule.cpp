@@ -183,11 +183,11 @@ void AiurModule::onStart()
 	/** Begin of common code for **/
 	/** persistent file systems  **/
 	/******************************/
-	// Number of moods - Defensive = 5
+	// Number of moods = 6
 	const int dataSizeCopy = moodManager->getNumberMoods() * 2 + 1;
 	dataGameCopy = new int[dataSizeCopy];
 
-	// dataSize = ( 5 moods * 2 (#wins; #lose) + 1 (#games) ) * 7 map sizes (ie 2p, ..., 8p) = 88		
+	// dataSize = ( 6 moods * 2 (#wins; #lose) + 1 (#games) ) * 7 map sizes (ie 2p, ..., 8p) = 88		
 	const int dataSize = 7 * dataSizeCopy; 
 	dataGame = new int[dataSize];
 
@@ -392,11 +392,12 @@ void AiurModule::onStart()
 	//	moodManager->setAnotherRandomMood();
 	//}
 
+	// DEPRECATED
 	// Defensive mood is only now to face a Zerg rush. do not select it as a starting mood.
-	if( moodManager->getMood() == MoodManager::MoodData::Defensive )
-	{
-		moodManager->setAnotherRandomMood();
-	}
+	//if( moodManager->getMood() == MoodManager::MoodData::Defensive )
+	//{
+	//	moodManager->setAnotherRandomMood();
+	//}
 
 	buildManager->setDebugMode(true);
 	scoutManager->setDebugMode(false);
@@ -479,15 +480,28 @@ void AiurModule::onEnd(bool isWinner)
 			int shift = BWTA::getStartLocations().size() - 2;
 			++dataGame[dataSizeCopy * shift];
 			int win		= isWinner ? 0 : 1;
-			int index	= moodManager->getFirstMoodRank()*2 + win + 1 + ( dataSizeCopy * shift );
+			int index;
+			
+			// if we had switched to Defensive:
+			// win = +1 for win defensive
+			// loose = +1 for loose firstMood
+			if( hasSwitchedToDefensive )
+			{
+				if(isWinner)
+					index = ((int)MoodManager::MoodData::Defensive)*2 + 1 + ( dataSizeCopy * shift );
+				else
+					index = moodManager->getFirstMoodRank()*2 + 2 + ( dataSizeCopy * shift );
+			}
+			else
+				index = ((int)moodManager->getMood())*2 + win + 1 + ( dataSizeCopy * shift );
 
 			// DEPRECATED: Take only into account games where we didn't win after switching to Defensive mood.
 			//if( !hasSwitchedToDefensive || !isWinner )
 			++dataGame[index];
 
 			// Write data
-			// dataSize = ( 5 moods * 2 (#wins; #lose) + 1 (#games) ) * 7 map sizes (ie 2p, ..., 8p) = 88
-			const int dataSize = 7 * ( moodManager->getNumberMoods() * 2 + 1 );
+			// dataSize = ( 6 moods * 2 (#wins; #lose) + 1 (#games) ) * 7 map sizes (ie 2p, ..., 8p) = 88
+			const int dataSize = 7 * dataSizeCopy;
 
 			inGame.seekp( 0 );
 			
@@ -860,6 +874,7 @@ void AiurModule::onFrame()
 		//	moodManager->setMood(MoodManager::MoodData::Defensive);
 		//}
 
+
 		// NEW DEFENSIVE CRITERION
 		// Against Zerg only.
 		// if before 3000 frames, #enemy's worker + 4 =< #our workers
@@ -868,6 +883,7 @@ void AiurModule::onFrame()
 		// OR
 		// we do not scout enemy's base before the first 2200 frames (holds also against Random players)
 		// then get prepared for a rush! ==> defensive mode
+
 		if (
 				moodManager->getMood() != MoodManager::MoodData::Defensive &&
 				informationManager->getNumberEnemyBases() <= 1 &&
@@ -885,14 +901,16 @@ void AiurModule::onFrame()
 					//	informationManager->canSeeEnemyPatches() &&
 					//	Broodwar->self()->allUnitCount( UnitTypes::Protoss_Probe ) >= informationManager->getNumberEnemyWorkers() + 6
 					//)
-					|| 
-					(
-						Broodwar->getFrameCount() > 2500 
-						&&
-						( Broodwar->enemy()->getRace() == Races::Zerg || Broodwar->enemy()->getRace() == Races::Random )						
-						&&
-						!informationManager->isEnemySpotted()
-					)
+
+					// DEPRECATED: Let the mood selection learning deal with that
+					//|| 
+					//(
+					//	Broodwar->getFrameCount() > 2500 
+					//	&&
+					//	( Broodwar->enemy()->getRace() == Races::Zerg || Broodwar->enemy()->getRace() == Races::Random )						
+					//	&&
+					//	!informationManager->isEnemySpotted()
+					//)
 				)
 			)
 		{
@@ -928,11 +946,11 @@ void AiurModule::onFrame()
 			armyManager->setLastExpandFrame( Broodwar->getFrameCount() );
 		}
 
-		// if we switched to a defensive mood and we are far in the game (i.e. 16000 frames), 
+		// if we switched to a defensive mood and we are far in the game (i.e. 13000 frames), 
 		// or if we have a DPS of at least 12, then set a macro mood
 		if( moodManager->getMood() == MoodManager::MoodData::Defensive && 
 			moodManager->getPreviousMood() != MoodManager::MoodData::Defensive && 
-			( Broodwar->getFrameCount() >= 16000 || armyManager->myDPStoGround() > 12 ) )
+			( Broodwar->getFrameCount() >= 13000 || armyManager->myDPStoGround() > 12 ) )
 		{
 			moodManager->setMood( MoodManager::MoodData::Macro );
 		}

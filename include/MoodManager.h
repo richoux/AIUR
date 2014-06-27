@@ -45,8 +45,8 @@ public:
 		Mood previousMood;
 		Mood firstMood;
 
-		// Do not take Defensive into account
-		static const int numberMoods = 5;
+		// Take Defensive into account
+		static const int numberMoods = 6;
 	};
 
 	class Points
