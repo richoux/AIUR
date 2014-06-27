@@ -26,7 +26,6 @@ Random::Random()
 {
 	maxInt	= 0;
 	lastInt	= 0;
-	epsilon = 0.005;
 	randGen.seed( static_cast<unsigned int>(std::time(NULL) + _getpid() ) );
 }
 
@@ -37,7 +36,6 @@ Random::Random( int maxInt )
 
 	this->maxInt	= maxInt;
 	lastInt			= 0;
-	epsilon			= 0.005;
 
 	boost::random::discrete_distribution<>::param_type pt( distrib );
 	random.param( pt );
@@ -48,7 +46,7 @@ Random::Random( int *data, int numberMoods, bool roundRobin )
 {
 	maxInt	= numberMoods;
 	lastInt	= 0;
-	epsilon = 0.005;
+	epsilon = 0.05;
 	distrib = std::vector<double>( numberMoods, 0 );
 	randGen.seed( static_cast<unsigned int>(std::time(NULL) + _getpid() ) );
 	this->setDistribution( data, numberMoods, roundRobin );
