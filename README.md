@@ -5,7 +5,9 @@
 
 AIUR (Artificial Intelligence Using Randomness) is an AI for StarCraft: Brood War.
 
-Please visit http://aiur-group.github.io/AIUR to download the last version of AIUR and to get further details.
+You can download the last release version here: https://github.com/AIUR-group/AIUR/archive/AIUR_2.2.zip
+
+Please visit http://aiur-group.github.io/AIUR to get further details.
 
 
 
