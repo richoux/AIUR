@@ -68,6 +68,7 @@ private:
 
 	int				*dataGame;
 	int				*dataGameCopy;
+	double			epsilon;
 	std::ofstream	inGame;
 	std::ifstream	afterGame;
 	std::ifstream	epsilonFile;

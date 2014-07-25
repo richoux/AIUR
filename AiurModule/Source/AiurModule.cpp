@@ -252,6 +252,7 @@ void AiurModule::onStart()
 			IOErrorOccurred = true;
 		}
 
+		directories.close();
 
 		/**************************/
 		/**   Persistent files   **/
@@ -319,7 +320,6 @@ void AiurModule::onStart()
 
 			// take the epsilon value written in the epsilon file
 			epsilonFile.open( (char*)epsilonFilename.c_str(), std::ifstream::in );
-			double epsilon;
 
 			// If the file is empty
 			if( epsilonFile.peek() == std::ifstream::traits_type::eof() )
@@ -537,8 +537,6 @@ void AiurModule::onEnd(bool isWinner)
 			delete [] dataGameCopy;
 			delete [] dataGame;
 		}
-
-		directories.close();
 	}
 
 	log("onEnd(%d)\n",isWinner);

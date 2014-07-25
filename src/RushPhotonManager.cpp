@@ -226,7 +226,17 @@ Position RushPhotonManager::computeStartingPosition( BWTA::BaseLocation *baseLoc
 
 	for( unsigned int i = 0; i < poly.size(); ++i )
 	{
-		if( BWTA::getRegion( poly[i] ) == BWTA::getRegion( baseLoc->getTilePosition() ) )
+		// BUG in BWTA!!! BWTA::getRegion( t ) where t is a point in a choke leads to a crash!
+		if( Broodwar->mapHash() == hashMap.hash( "Benzene" ) 
+			&& 
+			Broodwar->self()->getStartLocation().x() == 117 && Broodwar->self()->getStartLocation().y() == 13
+			&& 
+			( i >= 64 && i <= 66 ) )
+			continue;
+
+		BWTA::Region *r1 = BWTA::getRegion( poly[i] );
+		BWTA::Region *r2 = BWTA::getRegion( baseLoc->getTilePosition() );
+		if( r1 != NULL && r2 != NULL && r1 == r2 )
 		{
 			double dist = baseLoc->getPosition().getApproxDistance( poly[i] );
 			for each( BWTA::Chokepoint *choke in baseLoc->getRegion()->getChokepoints() )

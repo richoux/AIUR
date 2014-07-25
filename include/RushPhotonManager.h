@@ -30,6 +30,7 @@
 #include <WorkerManager.h>
 #include <UnitStates.h>
 #include <BWAPI.h>
+#include <HashMap.h>
 
 using namespace BWAPI;
 using namespace std;
@@ -85,4 +86,5 @@ private:
 	bool										firstPylonDone;
 	bool										hasLostControl;
 	bool										debugMode;
+	HashMap										hashMap;
 };
