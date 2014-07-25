@@ -73,6 +73,7 @@ public:
 
 	int				getFirstMoodRank		();
 	int				getNumberMoods			();
+	double			getEpsilon				();
 
 	std::vector<double>	getDistribution	();
 
@@ -84,8 +85,8 @@ public:
 	void			setMood					(MoodData::Mood);
 	void			initialize				();
 	void			initialize				(MoodData::Mood);
-	void			initialize				(int*);
-	void			initializeRoundRobin	(int*);
+	void			initialize				(int*, double = 0.01);
+	void			initializeRoundRobin	(int*, double = 0.01);
 	void			setRandomMood			(void);
 	void			setAnotherRandomMood	(void);
 	void			update					(void);

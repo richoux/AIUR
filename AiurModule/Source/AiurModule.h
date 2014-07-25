@@ -70,6 +70,7 @@ private:
 	int				*dataGameCopy;
 	std::ofstream	inGame;
 	std::ifstream	afterGame;
+	std::ifstream	epsilonFile;
 	std::ifstream	directories;
 	bool			IOErrorOccurred;
 	bool			hasSwitchedToDefensive;

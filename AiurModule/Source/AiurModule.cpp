@@ -200,6 +200,7 @@ void AiurModule::onStart()
 	// IO files name
 	string afterGameFilename;
 	string inGameFilename;
+	string epsilonFilename;
 	string nameEnemy;
 
 
@@ -225,20 +226,24 @@ void AiurModule::onStart()
 		directories.open( (char*)"bwapi-data\\directories.txt", std::ifstream::in );
 		if( directories.is_open() && directories.peek() != std::ifstream::traits_type::eof() )
 		{
+			nameEnemy = Broodwar->enemy()->getName();
+
 			// Read file
 			char pathRead[256];
 			directories >> pathRead;
-			afterGameFilename = pathRead;
-			nameEnemy = Broodwar->enemy()->getName();
+			afterGameFilename = pathRead + nameEnemy + ".txt";
 			//afterGameFilename += nameEnemy.substr(0, nameEnemy.find("_"));
-			afterGameFilename += nameEnemy;
 
 			// Write file
 			char pathWrite[256];
 			directories >> pathWrite;
-			inGameFilename = pathWrite;
+			inGameFilename = pathWrite + nameEnemy + ".txt";
 			//inGameFilename += nameEnemy.substr(0, nameEnemy.find("_"));
-			inGameFilename += nameEnemy;
+
+			// Epsilon file
+			char pathEpsilon[256];
+			directories >> pathEpsilon;
+			epsilonFilename = pathEpsilon;
 		}
 		// directories.txt is not open or is empty
 		else
@@ -312,6 +317,17 @@ void AiurModule::onStart()
 				}
 			}
 
+			// take the epsilon value written in the epsilon file
+			epsilonFile.open( (char*)epsilonFilename.c_str(), std::ifstream::in );
+			double epsilon;
+
+			// If the file is empty
+			if( epsilonFile.peek() == std::ifstream::traits_type::eof() )
+				epsilon = 0.01; // default value
+			else
+				epsilonFile >> epsilon;
+
+
 			// Pick-up a mood. Change the uniformed distribution after 20 games
 			//if( numberOfGames >= 10 )
 			//{
@@ -320,9 +336,9 @@ void AiurModule::onStart()
 
 				// Tyr each mood twice
 				if( numberOfGames >= moodManager->getNumberMoods()*2 )
-					moodManager->initialize( dataGameCopy );
+					moodManager->initialize( dataGameCopy, epsilon );
 				else
-					moodManager->initializeRoundRobin( dataGameCopy );
+					moodManager->initializeRoundRobin( dataGameCopy, epsilon );
 			//}
 			//else
 			//{
@@ -1001,10 +1017,11 @@ void AiurModule::onFrame()
 		Broodwar->drawTextScreen(490,180,"Enemy Buildings: %d", informationManager->getNumberEnemyBuildings());
 		Broodwar->drawTextScreen(490,190,"Borders: %d", borderManager->getMyBorder().size());
 		Broodwar->drawTextScreen(490,200,"M/G:          %3d/%3d", spendManager->getMineralStock(), spendManager->getGasStock());
-		Broodwar->drawTextScreen(490,210,"Distrib: ");
+		Broodwar->drawTextScreen(490,210,"Epsilon:    %.5f", moodManager->getEpsilon());
+		Broodwar->drawTextScreen(490,220,"Distrib: ");
 		std::vector<double> distrib = moodManager->getDistribution();
 		for( unsigned int i = 0; i < distrib.size(); ++i )
-			Broodwar->drawTextScreen(450 + i*30,220,"%1.2f ", distrib[i]*10);
+			Broodwar->drawTextScreen(450 + i*30,230,"%1.2f ", distrib[i]*10);
 
 		diff = compteur.GetTimeFromStart();
 		if (Broodwar->getFrameCount() > 10)

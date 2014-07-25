@@ -36,12 +36,13 @@ class Random
 public:
 	Random();
 	Random( int );
-	Random( int*, int, bool = false );
+	Random( int*, int, double = 0.01, bool = false );
 	~Random();
 
 	void				setMaxInt		( int );
 	void				setDistribution	( int*, int, bool = false );
 	std::vector<double>	getDistribution	();
+	double				getEpsilon		();
 	int					nextInt			();
 	int					nextAnotherInt	();
 

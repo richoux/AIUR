@@ -42,11 +42,11 @@ Random::Random( int maxInt )
 	randGen.seed( static_cast<unsigned int>(std::time(NULL) + _getpid() ) );
 }
 
-Random::Random( int *data, int numberMoods, bool roundRobin )
+Random::Random( int *data, int numberMoods, double epsilon, bool roundRobin )
 {
 	maxInt	= numberMoods;
 	lastInt	= 0;
-	epsilon = 0.1;
+	this->epsilon = epsilon;
 	distrib = std::vector<double>( numberMoods, 0 );
 	randGen.seed( static_cast<unsigned int>(std::time(NULL) + _getpid() ) );
 	this->setDistribution( data, numberMoods, roundRobin );
@@ -57,6 +57,11 @@ Random::~Random(){}
 std::vector<double> Random::getDistribution()
 {
 	return random.probabilities();
+}
+
+double Random::getEpsilon()
+{
+	return epsilon;
 }
 
 void Random::setDistribution( int *data, int numberMoods, bool roundRobin )

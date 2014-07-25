@@ -64,16 +64,16 @@ void MoodManager::initialize(MoodManager::MoodData::Mood mood)
 	this->setMoodPlan();
 }
 
-void MoodManager::initialize( int *data )
+void MoodManager::initialize( int *data, double epsilon )
 {
-	randomMood				= new Random( data, moodData.numberMoods );
+	randomMood				= new Random( data, moodData.numberMoods, epsilon );
 	moodData.mood			= (MoodData::Mood)randomMood->nextInt();
 	moodData.previousMood	= moodData.mood;
 	moodData.firstMood		= moodData.mood;
 	this->setMoodPlan();
 }
 
-void MoodManager::initializeRoundRobin( int *data )
+void MoodManager::initializeRoundRobin( int *data, double epsilon )
 {
 	for( int i = 1; i < moodData.numberMoods * 2 + 1 ; i += 2 )
 		if( data[i] + data[i+1] < 2 )
@@ -81,7 +81,7 @@ void MoodManager::initializeRoundRobin( int *data )
 		else
 			data[i]	= 0;
 
-	randomMood				= new Random( data, moodData.numberMoods, true );
+	randomMood				= new Random( data, moodData.numberMoods, epsilon, true );
 	moodData.mood			= (MoodData::Mood)randomMood->nextInt();
 	moodData.previousMood	= moodData.mood;
 	moodData.firstMood		= moodData.mood;
@@ -96,6 +96,11 @@ std::vector<double>	MoodManager::getDistribution()
 int MoodManager::getNumberMoods()
 {
 	return moodData.numberMoods;
+}
+
+double MoodManager::getEpsilon()
+{
+	return randomMood->getEpsilon();
 }
 
 int MoodManager::getFirstMoodRank()
