@@ -69,9 +69,10 @@ private:
 	int				*dataGame;
 	int				*dataGameCopy;
 	double			epsilon;
+	int				numberTrainingGamesPerMood;
 	std::ofstream	inGame;
 	std::ifstream	afterGame;
-	std::ifstream	epsilonFile;
+	std::ifstream	dataFile;
 	std::ifstream	directories;
 	bool			IOErrorOccurred;
 	bool			hasSwitchedToDefensive;

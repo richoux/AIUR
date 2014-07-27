@@ -85,8 +85,8 @@ public:
 	void			setMood					(MoodData::Mood);
 	void			initialize				();
 	void			initialize				(MoodData::Mood);
-	void			initialize				(int*, double = 0.01);
-	void			initializeRoundRobin	(int*, double = 0.01);
+	void			initialize				(int*, double = 0.1);
+	void			initializeRoundRobin	(int*, int, double = 0.1);
 	void			setRandomMood			(void);
 	void			setAnotherRandomMood	(void);
 	void			update					(void);

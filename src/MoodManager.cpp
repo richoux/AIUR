@@ -73,10 +73,10 @@ void MoodManager::initialize( int *data, double epsilon )
 	this->setMoodPlan();
 }
 
-void MoodManager::initializeRoundRobin( int *data, double epsilon )
+void MoodManager::initializeRoundRobin( int *data, int trainingGames, double epsilon )
 {
 	for( int i = 1; i < moodData.numberMoods * 2 + 1 ; i += 2 )
-		if( data[i] + data[i+1] < 2 )
+		if( data[i] + data[i+1] < trainingGames )
 			data[i] = 1;
 		else
 			data[i]	= 0;

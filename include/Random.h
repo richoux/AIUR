@@ -36,7 +36,7 @@ class Random
 public:
 	Random();
 	Random( int );
-	Random( int*, int, double = 0.01, bool = false );
+	Random( int*, int, double = 0.1, bool = false );
 	~Random();
 
 	void				setMaxInt		( int );

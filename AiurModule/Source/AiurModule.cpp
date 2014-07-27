@@ -200,7 +200,7 @@ void AiurModule::onStart()
 	// IO files name
 	string afterGameFilename;
 	string inGameFilename;
-	string epsilonFilename;
+	string dataFilename;
 	string nameEnemy;
 
 
@@ -241,7 +241,7 @@ void AiurModule::onStart()
 			//inGameFilename += nameEnemy.substr(0, nameEnemy.find("_"));
 
 			// Epsilon file
-			epsilonFilename = "bwapi-data\\AI\\epsilon.txt";
+			dataFilename = "bwapi-data\\AI\\data.txt";
 		}
 		// directories.txt is not open or is empty
 		else
@@ -317,14 +317,19 @@ void AiurModule::onStart()
 			}
 
 			// take the epsilon value written in the epsilon file
-			epsilonFile.open( (char*)epsilonFilename.c_str(), std::ifstream::in );
+			dataFile.open( (char*)dataFilename.c_str(), std::ifstream::in );
 
 			// If the file is empty
-			if( epsilonFile.peek() == std::ifstream::traits_type::eof() )
-				epsilon = 0.01; // default value
+			if( dataFile.peek() == std::ifstream::traits_type::eof() )
+			{
+				epsilon = 0.1; // default value
+				numberTrainingGamesPerMood = 3;
+			}
 			else
-				epsilonFile >> epsilon;
-
+			{
+				dataFile >> epsilon;
+				dataFile >> numberTrainingGamesPerMood;
+			}
 
 			// Pick-up a mood. Change the uniformed distribution after 20 games
 			//if( numberOfGames >= 10 )
@@ -332,11 +337,11 @@ void AiurModule::onStart()
 				for( int i = 0; i < dataSizeCopy; ++i )
 					dataGameCopy[i] = dataGame[i + dataSizeCopy * shift];
 
-				// Tyr each mood twice
-				if( numberOfGames >= moodManager->getNumberMoods()*2 )
+				// Try each mood during a fixed number of training games per moods
+				if( numberOfGames >= numberTrainingGamesPerMood * moodManager->getNumberMoods() )
 					moodManager->initialize( dataGameCopy, epsilon );
 				else
-					moodManager->initializeRoundRobin( dataGameCopy, epsilon );
+					moodManager->initializeRoundRobin( dataGameCopy, numberTrainingGamesPerMood, epsilon );
 			//}
 			//else
 			//{
