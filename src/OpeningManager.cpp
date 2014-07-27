@@ -89,6 +89,9 @@ void OpeningManager::initialize()
 		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,70);
 		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Zealot,75);
 		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,70);
+
+		// let's try, to prevent DT rush
+		buildOrderManager->build(1, BWAPI::UnitTypes::Protoss_Observer, 70);
 		break;			
 	}
 }
