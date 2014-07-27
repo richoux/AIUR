@@ -836,37 +836,51 @@ void ArmyManager::update()
 								arbitrator->setBid(this, u, 70);
 					}
 
-					// focus on pylons rather than photon cannons if #photons > 3 * #pylons, there is are nobody around
+					// hit enemy units first
+					UnitGroup units = enemies.inRadius( it->first->getType().seekRange(), it->first->getPosition() ).not(isBuilding);
+					UnitGroup airUnits = units(isFlyer);
+					UnitGroup groundUnits = units.not(isFlyer);
+					if( ( !airUnits.empty() && it->first->getType().maxAirHits() > 0 ) 
+						|| 
+						( !groundUnits.empty() && it->first->getType().maxGroundHits() > 0 ) )
+					{
+						it->first->attack( nearestUnit( it->first, pylons ) );
+						if( !unitStates->isState( it->first, UnitStates::Attacking ) )
+							unitStates->setState( it->first, UnitStates::Attacking );
+					}
+
+
+					// focus on pylons
 					if( Broodwar->enemy()->getRace() == Races::Protoss && 
 						( unitStates->isState( it->first, UnitStates::Moving ) || unitStates->isState( it->first, UnitStates::Attacking ) ) )
 					{
 						UnitGroup enemies = SelectAllEnemy().inRadius( 2 * TILE_SIZE * Broodwar->self()->sightRange( it->first->getType() ), it->first->getPosition() );
-						UnitGroup photons = enemies( UnitTypes::Protoss_Photon_Cannon );
+						//UnitGroup photons = enemies( UnitTypes::Protoss_Photon_Cannon );
 						UnitGroup pylons = enemies( UnitTypes::Protoss_Pylon );
-						UnitGroup powered = enemies(isBuilding).not(isUnpowered, isInvincible);
+						//UnitGroup powered = enemies(isBuilding).not(isUnpowered, isInvincible);
 
-						UnitGroup units = enemies.inRadius( it->first->getType().seekRange(), it->first->getPosition() ).not(isBuilding);
-						UnitGroup airUnits = units(isFlyer);
-						UnitGroup groundUnits = units.not(isFlyer);
+						//UnitGroup units = enemies.inRadius( it->first->getType().seekRange(), it->first->getPosition() ).not(isBuilding);
+						//UnitGroup airUnits = units(isFlyer);
+						//UnitGroup groundUnits = units.not(isFlyer);
 
-						if( ( airUnits.empty() || it->first->getType().maxAirHits() == 0 ) && ( groundUnits.empty() || it->first->getType().maxGroundHits() == 0 ) )
-						{
-							if( 3 * pylons.size() < photons.size() )
-							{
+						//if( ( airUnits.empty() || it->first->getType().maxAirHits() == 0 ) && ( groundUnits.empty() || it->first->getType().maxGroundHits() == 0 ) )
+						//{
+						//	if( 3 * pylons.size() < photons.size() )
+						//	{
 								// attack building, so don't go through the attackUnitPlanner
 								it->first->attack( nearestUnit( it->first, pylons ) );
 								if( !unitStates->isState( it->first, UnitStates::Attacking ) )
 									unitStates->setState( it->first, UnitStates::Attacking );
-							}
+						//	}
 							// keep unpowered buildings alone
-							else if( !powered.empty() )
-							{
+						//	else if( !powered.empty() )
+						//	{
 								// attack building, so don't go through the attackUnitPlanner
-								it->first->attack( nearestUnit( it->first, powered ) );
-								if( !unitStates->isState( it->first, UnitStates::Attacking ) )
-									unitStates->setState( it->first, UnitStates::Attacking );
-							}
-						}
+						//		it->first->attack( nearestUnit( it->first, powered ) );
+						//		if( !unitStates->isState( it->first, UnitStates::Attacking ) )
+						//			unitStates->setState( it->first, UnitStates::Attacking );
+						//	}
+						//}
 					}
 
 					if( it->first->isIdle() )

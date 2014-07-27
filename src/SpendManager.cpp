@@ -199,6 +199,7 @@ void SpendManager::needMoreGateways(int factor)
 
 void SpendManager::update()
 {
+	Broodwar->drawTextScreen(30,250,"M: %d, Ms: %d, G: %d, Gs: %d", minerals, mineralStock, gas, gasStock);
 	if (Broodwar->getFrameCount() > lastFrameCheck + 24)
 	{
 		lastFrameCheck			= Broodwar->getFrameCount();
@@ -288,21 +289,21 @@ void SpendManager::update()
 			//	baseManager->setRefineryBuildPriority(0);
 
 			// Forget about everything, except pylons, gateway if we don't have four at leat, as well as cyber and assimilator 
-			for (unsigned int i = 0; i < vecBuildings.size(); i++)
-			{
-				if( vecBuildings[i] != UnitTypes::Protoss_Pylon
-					&&
-					vecBuildings[i] != UnitTypes::Protoss_Gateway
-					&&
-					vecBuildings[i] != UnitTypes::Protoss_Cybernetics_Core 
-					&& 
-					vecBuildings[i] != UnitTypes::Protoss_Assimilator )
-				{
-					int count = buildOrderManager->cancelAllBuildingsOfType(vecBuildings[i]);
-					mineralStock	-= count * vecBuildings[i].mineralPrice();
-					gasStock		-= count * vecBuildings[i].gasPrice();
-				}
-			}
+			//for (unsigned int i = 0; i < vecBuildings.size(); i++)
+			//{
+			//	if( vecBuildings[i] != UnitTypes::Protoss_Pylon
+			//		&&
+			//		vecBuildings[i] != UnitTypes::Protoss_Gateway
+			//		&&
+			//		vecBuildings[i] != UnitTypes::Protoss_Cybernetics_Core 
+			//		&& 
+			//		vecBuildings[i] != UnitTypes::Protoss_Assimilator )
+			//	{
+			//		int count = buildOrderManager->cancelAllBuildingsOfType(vecBuildings[i]);
+			//		mineralStock	-= count * vecBuildings[i].mineralPrice();
+			//		gasStock		-= count * vecBuildings[i].gasPrice();
+			//	}
+			//}
 
 			// If all gateways are busy, build some another ones, depending of our money
 			UnitGroup myGateways = SelectAll(UnitTypes::Protoss_Gateway)(isCompleted);
@@ -320,42 +321,46 @@ void SpendManager::update()
 
 			for each (Unit *bat in freeGateways)
 			{
-				if( unitCount->zealotRatio <= unitCount->zealotIdealRatio 
-					&&
-					// no dragoon before 9000 frames in DefensiveMood
-					( Broodwar->getFrameCount() < 9000 
-					  || unitCount->dragoonIdealRatio == 0 
-					  || unitCount->dragoonRatio > unitCount->dragoonIdealRatio 
-					  || Broodwar->self()->completedUnitCount( UnitTypes::Protoss_Cybernetics_Core ) == 0 
-					  || gas < gasStock + 50 
-					) 
-					&&
-					unitCount->zealotIdealRatio != 0 && minerals >= mineralStock + 100 )
+				if( Broodwar->getFrameCount() < 9000 )
 				{
 					bat->train(UnitTypes::Protoss_Zealot);
 					minerals = Broodwar->self()->minerals();
 					continue;
 				}
-
-				// no dragoon before 9000 frames in DefensiveMood
-				if( Broodwar->getFrameCount() >= 9000 
-					&& 
-					unitCount->dragoonRatio <= unitCount->dragoonIdealRatio 
-					&& 
-					unitCount->dragoonIdealRatio != 0 
-					&& 
-					minerals >= mineralStock + 125 
-					&& 
-					gas >= gasStock + 50)
+				else
 				{
-					bat->train(UnitTypes::Protoss_Dragoon);
-					minerals = Broodwar->self()->minerals();
-					gas = Broodwar->self()->gas();
-					continue;
+					if( unitCount->zealotRatio <= unitCount->zealotIdealRatio 
+						&&
+						( unitCount->dragoonIdealRatio == 0 
+						|| unitCount->dragoonRatio >= unitCount->dragoonIdealRatio 
+						|| Broodwar->self()->completedUnitCount( UnitTypes::Protoss_Cybernetics_Core ) == 0 
+						|| gas < 50 
+						) 
+						&&
+						unitCount->zealotIdealRatio != 0 && minerals >= 100 )
+					{
+						bat->train(UnitTypes::Protoss_Zealot);
+						minerals = Broodwar->self()->minerals();
+						continue;
+					}
+
+					if( unitCount->dragoonRatio < unitCount->dragoonIdealRatio 
+						&& 
+						unitCount->dragoonIdealRatio != 0 
+						&& 
+						minerals >= 125 
+						&& 
+						gas >= 50)
+					{
+						bat->train(UnitTypes::Protoss_Dragoon);
+						minerals = Broodwar->self()->minerals();
+						gas = Broodwar->self()->gas();
+						continue;
+					}
 				}
 			}
 		}
-		else
+		else // not in Defensive mood, or after 12000 frames
 		{
 			// built assimilator after 4500 frames if there are no problems (no enemy rush) or if we don't rush ourselves.
 			if ( Broodwar->self()->visibleUnitCount(UnitTypes::Protoss_Assimilator) == 0 
