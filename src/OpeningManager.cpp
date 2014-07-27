@@ -45,7 +45,7 @@ void OpeningManager::initialize()
 	case MoodManager::MoodData::Defensive:
 		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,70);
 		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Zealot,75);
-		buildOrderManager->build(3,BWAPI::UnitTypes::Protoss_Gateway,70);
+		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,70);
 		break;
 	case MoodManager::MoodData::FastExpo:
 		if (BWAPI::Broodwar->mapHash() != hashMap.hash("Andromeda"))

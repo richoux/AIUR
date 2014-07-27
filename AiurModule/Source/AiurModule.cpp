@@ -241,9 +241,7 @@ void AiurModule::onStart()
 			//inGameFilename += nameEnemy.substr(0, nameEnemy.find("_"));
 
 			// Epsilon file
-			char pathEpsilon[256];
-			directories >> pathEpsilon;
-			epsilonFilename = pathEpsilon;
+			epsilonFilename = "bwapi-data\\AI\\epsilon.txt";
 		}
 		// directories.txt is not open or is empty
 		else

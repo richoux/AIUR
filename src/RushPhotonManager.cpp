@@ -561,20 +561,38 @@ void RushPhotonManager::update()
 
 							TilePosition toBuild;
 
-							switch( ( Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) % 3 ) )
+							if( Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) == 0 )
 							{
-							case 2:
-								toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile + xShift*2, yTile + yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
-								break;
-							case 1:
-								toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile, yTile ), UnitTypes::Protoss_Photon_Cannon, 0 );
-								break;
-							case 0:
-								toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile - xShift*2, yTile - yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
-								break;
-							}
+								if( Broodwar->self()->minerals() >= 450 )
+								{
+									// build the first three photons in a row
+									toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile - xShift*2, yTile - yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
+									rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
 
-							rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
+									toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile, yTile ), UnitTypes::Protoss_Photon_Cannon, 0 );
+									rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
+
+									toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile + xShift*2, yTile + yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
+									rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
+								}
+							}
+							else
+							{
+								switch( ( Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) % 3 ) )
+								{
+								case 2:
+									toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile + xShift*2, yTile + yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
+									break;
+								case 1:
+									toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile, yTile ), UnitTypes::Protoss_Photon_Cannon, 0 );
+									break;
+								case 0:
+									toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile - xShift*2, yTile - yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
+									break;
+								}
+
+								rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
+							}
 						}
 					}
 					else if( Broodwar->self()->completedUnitCount( UnitTypes::Protoss_Photon_Cannon ) == Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) && 

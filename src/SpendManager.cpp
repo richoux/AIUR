@@ -279,8 +279,8 @@ void SpendManager::update()
 			)
 		{
 			/* if we have not at least 2 zealots, training them in emergency */
-			if (Broodwar->self()->visibleUnitCount(UnitTypes::Protoss_Zealot < 2))
-				buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Zealot,100);
+			if (Broodwar->self()->visibleUnitCount(UnitTypes::Protoss_Zealot < 4))
+				buildOrderManager->build(4,BWAPI::UnitTypes::Protoss_Zealot,100);
 
 			// DEPRECATED: Forget about gas, except if the enemy is Protoss
 			//if ( Broodwar->enemy()->getRace() != Races::Protoss && moodManager->hasChangedMood() && moodManager->getMood() == MoodManager::MoodData::Defensive )
