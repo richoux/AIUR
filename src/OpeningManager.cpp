@@ -44,8 +44,9 @@ void OpeningManager::initialize()
 		break;
 	case MoodManager::MoodData::Defensive:
 		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,70);
-		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Zealot,75);
-		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,70);
+		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Zealot,75);
+		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,75);
+		buildOrderManager->build(4,BWAPI::UnitTypes::Protoss_Zealot,80);
 		break;
 	case MoodManager::MoodData::FastExpo:
 		if (BWAPI::Broodwar->mapHash() != hashMap.hash("Andromeda"))
@@ -89,9 +90,6 @@ void OpeningManager::initialize()
 		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,70);
 		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Zealot,75);
 		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,70);
-
-		// let's try, to prevent DT rush
-		buildOrderManager->build(1, BWAPI::UnitTypes::Protoss_Observer, 70);
 		break;			
 	}
 }

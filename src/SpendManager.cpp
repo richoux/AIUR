@@ -301,7 +301,6 @@ void SpendManager::update()
 					int count = buildOrderManager->cancelAllBuildingsOfType(vecBuildings[i]);
 					mineralStock	-= count * vecBuildings[i].mineralPrice();
 					gasStock		-= count * vecBuildings[i].gasPrice();
-
 				}
 			}
 
@@ -321,8 +320,16 @@ void SpendManager::update()
 
 			for each (Unit *bat in freeGateways)
 			{
-				if ( unitCount->zealotRatio <= unitCount->zealotIdealRatio && 
-					( unitCount->dragoonIdealRatio == 0 || unitCount->dragoonRatio > unitCount->dragoonIdealRatio || Broodwar->self()->completedUnitCount( UnitTypes::Protoss_Cybernetics_Core ) == 0 || gas < gasStock + 50 ) &&
+				if( unitCount->zealotRatio <= unitCount->zealotIdealRatio 
+					&&
+					// no dragoon before 9000 frames in DefensiveMood
+					( Broodwar->getFrameCount() < 9000 
+					  || unitCount->dragoonIdealRatio == 0 
+					  || unitCount->dragoonRatio > unitCount->dragoonIdealRatio 
+					  || Broodwar->self()->completedUnitCount( UnitTypes::Protoss_Cybernetics_Core ) == 0 
+					  || gas < gasStock + 50 
+					) 
+					&&
 					unitCount->zealotIdealRatio != 0 && minerals >= mineralStock + 100 )
 				{
 					bat->train(UnitTypes::Protoss_Zealot);
@@ -330,7 +337,16 @@ void SpendManager::update()
 					continue;
 				}
 
-				if (unitCount->dragoonRatio <= unitCount->dragoonIdealRatio && unitCount->dragoonIdealRatio != 0 && minerals >= mineralStock + 125 && gas >= gasStock + 50)
+				// no dragoon before 9000 frames in DefensiveMood
+				if( Broodwar->getFrameCount() >= 9000 
+					&& 
+					unitCount->dragoonRatio <= unitCount->dragoonIdealRatio 
+					&& 
+					unitCount->dragoonIdealRatio != 0 
+					&& 
+					minerals >= mineralStock + 125 
+					&& 
+					gas >= gasStock + 50)
 				{
 					bat->train(UnitTypes::Protoss_Dragoon);
 					minerals = Broodwar->self()->minerals();
@@ -374,8 +390,6 @@ void SpendManager::update()
 				//get forge
 				if( ( moodManager->getMood() != MoodManager::MoodData::FastExpo 
 					  && 
-					  moodManager->getMood() != MoodManager::MoodData::Macro 
-					  && 
 					  moodManager->getMood() != MoodManager::MoodData::Defensive 
 					  && 
 					  Broodwar->getFrameCount() > 5100 
@@ -384,11 +398,6 @@ void SpendManager::update()
 					( moodManager->getMood() == MoodManager::MoodData::FastExpo 
 					  && 
 					  Broodwar->getFrameCount() > 7000
-					)
-					||
-					( moodManager->getMood() == MoodManager::MoodData::Macro
-					  && 
-					  Broodwar->getFrameCount() > 10000
 					)
 					||
 					( moodManager->getMood() == MoodManager::MoodData::Defensive
@@ -456,8 +465,6 @@ void SpendManager::update()
 						( 
 							moodManager->getMood() != MoodManager::MoodData::FastExpo 
 							&& 
-							moodManager->getMood() != MoodManager::MoodData::Macro
-							&& 
 							moodManager->getMood() != MoodManager::MoodData::Defensive
 							&& 
 							Broodwar->getFrameCount() > 7000 
@@ -467,12 +474,6 @@ void SpendManager::update()
 							moodManager->getMood() == MoodManager::MoodData::FastExpo 
 							&& 
 							Broodwar->getFrameCount() > 9000 
-						) 
-					    ||
-					    ( 
-							moodManager->getMood() == MoodManager::MoodData::Macro
-							&& 
-							Broodwar->getFrameCount() > 11000 
 						) 
 					    ||
 					    ( 

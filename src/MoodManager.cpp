@@ -208,10 +208,9 @@ void MoodManager::update()
 	{
 		if (moodData.mood == MoodManager::MoodData::Defensive && BWAPI::Broodwar->getFrameCount() < 13000)
 		{
-			// if a Protoss rush us, try to counter with dragoon, and with zealots against other races
 			if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss)
 			{
-				unitPoints->dragoon = 90;
+				unitPoints->dragoon = 20;
 			}
 		}
 		else
