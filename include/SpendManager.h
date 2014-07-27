@@ -104,6 +104,7 @@ private:
 	int					gas;
 	int					mineralStock;
 	int					gasStock;
+	int					TAKEGAS;
 
 	std::vector<BWAPI::UnitType>	vecBuildings;
 };

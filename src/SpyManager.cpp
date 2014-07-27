@@ -87,7 +87,7 @@ void SpyManager::onRevoke(BWAPI::Unit *unit, double bid)
 void SpyManager::buildObserver(bool force)
 {
 	//if we don't have any observatories nor robotic bays, first build one of each - and quickly!
-	if ( BWAPI::Broodwar->getFrameCount() > 8000 ) || force )
+	if ( BWAPI::Broodwar->getFrameCount() > 8000 || force )
 	{
 		if (BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Observatory) == 0)
 			buildOrderManager->build(1, BWAPI::UnitTypes::Protoss_Observatory, 70);

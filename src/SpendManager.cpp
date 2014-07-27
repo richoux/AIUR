@@ -22,8 +22,6 @@
 
 #include <SpendManager.h>
 
-#define TAKEGAS 5000
-
 using namespace BWAPI;
 
 
@@ -63,6 +61,7 @@ SpendManager::SpendManager()
 	gas									= 0;
 	mineralStock						= 0;
 	gasStock							= 0;
+	TAKEGAS								= 5000;
 
 	vecBuildings.push_back(UnitTypes::Protoss_Nexus);
 	vecBuildings.push_back(UnitTypes::Protoss_Pylon);
@@ -96,6 +95,8 @@ void SpendManager::setBuildOrderManager(BuildOrderManager *buildOrderManager)
 void SpendManager::setMoodManager(MoodManager *moodManager)
 {
 	this->moodManager = moodManager;
+	if( moodManager->getMood() == MoodManager::MoodData::Defensive )
+		TAKEGAS = 8000;
 }
 
 void SpendManager::setDefenseManager(DefenseManager *defenseManager)
@@ -371,8 +372,30 @@ void SpendManager::update()
 				/**************/
 
 				//get forge
-				if ((moodManager->getMood() != MoodManager::MoodData::FastExpo && Broodwar->getFrameCount() > 5100) ||
-					(moodManager->getMood() == MoodManager::MoodData::FastExpo && Broodwar->getFrameCount() > 7000))
+				if( ( moodManager->getMood() != MoodManager::MoodData::FastExpo 
+					  && 
+					  moodManager->getMood() != MoodManager::MoodData::Macro 
+					  && 
+					  moodManager->getMood() != MoodManager::MoodData::Defensive 
+					  && 
+					  Broodwar->getFrameCount() > 5100 
+					)
+					||
+					( moodManager->getMood() == MoodManager::MoodData::FastExpo 
+					  && 
+					  Broodwar->getFrameCount() > 7000
+					)
+					||
+					( moodManager->getMood() == MoodManager::MoodData::Macro
+					  && 
+					  Broodwar->getFrameCount() > 10000
+					)
+					||
+					( moodManager->getMood() == MoodManager::MoodData::Defensive
+					  && 
+					  Broodwar->getFrameCount() > 10000
+					)
+			      )
 				{
 					if ( Broodwar->self()->visibleUnitCount(UnitTypes::Protoss_Forge) == 0
 						 &&
@@ -433,6 +456,10 @@ void SpendManager::update()
 						( 
 							moodManager->getMood() != MoodManager::MoodData::FastExpo 
 							&& 
+							moodManager->getMood() != MoodManager::MoodData::Macro
+							&& 
+							moodManager->getMood() != MoodManager::MoodData::Defensive
+							&& 
 							Broodwar->getFrameCount() > 7000 
 						)
 					    ||
@@ -440,6 +467,18 @@ void SpendManager::update()
 							moodManager->getMood() == MoodManager::MoodData::FastExpo 
 							&& 
 							Broodwar->getFrameCount() > 9000 
+						) 
+					    ||
+					    ( 
+							moodManager->getMood() == MoodManager::MoodData::Macro
+							&& 
+							Broodwar->getFrameCount() > 11000 
+						) 
+					    ||
+					    ( 
+							moodManager->getMood() == MoodManager::MoodData::Defensive
+							&& 
+							Broodwar->getFrameCount() > 11000 
 						) 
 					) 
 				  )
@@ -469,7 +508,7 @@ void SpendManager::update()
 				}
 
 				//prepare observer sight upgrade
-				if ( Broodwar->getFrameCount() > 8000 && freeGateways.empty() )
+				if ( Broodwar->getFrameCount() > 11000 && freeGateways.empty() )
 				{
 					if (Broodwar->self()->completedUnitCount(UnitTypes::Protoss_Observatory) > 0 && 
 						minerals >= mineralStock + 150 && gas >= gasStock + 150)
