@@ -245,13 +245,12 @@ void AiurModule::onStart()
 			//inGameFilename += nameEnemy.substr(0, nameEnemy.find("_"));
 
 			// Data file
-			string emptyString = "";
 			char pathData[256];
 			directories >> pathData;
-			dataFilename = pathData + emptyString + "data.txt";
+			dataFilename = static_cast<string>(pathData) + "data.txt";
 
 			// Opponent file
-			opponentFilename = pathData + emptyString + "learning\\" + nameEnemy + ".txt";
+			opponentFilename = static_cast<string>(pathData) + "learning\\" + nameEnemy + ".txt";
 		}
 		// directories.txt is not open or is empty
 		else
