@@ -16,8 +16,6 @@
 
 *.dylib
 
-*.dll
-
 
 
 # Compiled Static libraries
@@ -41,5 +39,35 @@
 *.app
 
 
+
+# Other
+
+*.exp
+
+*.pdb
+
+*.ilk
+
+
+
 # VC++
 
+AiurModule/Debug/BuildLog.htm
+
+AiurModule/Debug/mt.dep
+
+AiurModule/Debug/vc90.idb
+
+AiurModule/Debug/vc90.pdb
+
+AiurModule/Release/BuildLog.htm
+
+AiurModule/Release/mt.dep
+
+AiurModule/Release/vc90.idb
+
+AiurModule/Release/vc90.pdb
+
+AiurProject.ncb
+
+AiurProject.suo
