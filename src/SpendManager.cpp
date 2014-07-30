@@ -199,7 +199,6 @@ void SpendManager::needMoreGateways(int factor)
 
 void SpendManager::update()
 {
-	Broodwar->drawTextScreen(30,250,"M: %d, Ms: %d, G: %d, Gs: %d", minerals, mineralStock, gas, gasStock);
 	if (Broodwar->getFrameCount() > lastFrameCheck + 24)
 	{
 		lastFrameCheck			= Broodwar->getFrameCount();

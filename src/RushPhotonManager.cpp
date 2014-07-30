@@ -561,23 +561,23 @@ void RushPhotonManager::update()
 
 							TilePosition toBuild;
 
-							if( Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) == 0 )
-							{
-								if( Broodwar->self()->minerals() >= 450 )
-								{
-									// build the first three photons in a row
-									toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile - xShift*2, yTile - yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
-									rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
+							//if( Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) == 0 )
+							//{
+							//	if( Broodwar->self()->minerals() >= 450 )
+							//	{
+							//		// build the first three photons in a row
+							//		toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile - xShift*2, yTile - yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
+							//		rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
 
-									toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile, yTile ), UnitTypes::Protoss_Photon_Cannon, 0 );
-									rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
+							//		toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile, yTile ), UnitTypes::Protoss_Photon_Cannon, 0 );
+							//		rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
 
-									toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile + xShift*2, yTile + yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
-									rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
-								}
-							}
-							else
-							{
+							//		toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile + xShift*2, yTile + yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
+							//		rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
+							//	}
+							//}
+							//else
+							//{
 								switch( ( Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) % 3 ) )
 								{
 								case 2:
@@ -592,7 +592,7 @@ void RushPhotonManager::update()
 								}
 
 								rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
-							}
+							//}
 						}
 					}
 					else if( Broodwar->self()->completedUnitCount( UnitTypes::Protoss_Photon_Cannon ) == Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) && 

@@ -46,6 +46,7 @@
 
 - From your AIUR\Release directory, copy the file AIUR.dll into your Starcraft\bwapi-data\AI directory
 - Copy the file AIUR\directories.txt into your Starcraft\bwapi-data directory
+- If you have any off-line learning files (opponent_name.txt), please copy them into your Starcraft\bwapi-data\AI directory. Make sure there is a folder "learning" in this directory!
 
 
 7) ALMOST DONE!

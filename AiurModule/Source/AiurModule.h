@@ -54,6 +54,7 @@
 #include <Random.h>
 #include <UnitStates.h>
 #include <fstream>
+#include <algorithm>
 
 class AiurModule : public BWAPI::AIModule
 {
@@ -68,11 +69,14 @@ private:
 
 	int				*dataGame;
 	int				*dataGameCopy;
+	int				*dataOpponent;
 	double			epsilon;
 	int				numberTrainingGamesPerMood;
+	bool			useOfflineTraining;
 	std::ofstream	inGame;
 	std::ifstream	afterGame;
 	std::ifstream	dataFile;
+	std::ifstream	opponentFile;
 	std::ifstream	directories;
 	bool			IOErrorOccurred;
 	bool			hasSwitchedToDefensive;

@@ -1,12 +1,12 @@
 bwapi-data\\read\\
 bwapi-data\\write\\
-bwapi-data\\epsilon.txt
+bwapi-data\\AI\\
 
 ### This file should be copied into the bwapi-data directory.
 
 ### The first line is the path for read-only files
 ### The second line is the path for write-only files
-### The third line is the path AND the name of the file containing the epsilon value
+### The third line is the path where the AI dll and off-game read-only files are
 
 ### If you modify this file, please follow these rules:
 ###  - always double-backslash the separators this way: parent_dir\\sub_dir\\sub_sub_dir\\

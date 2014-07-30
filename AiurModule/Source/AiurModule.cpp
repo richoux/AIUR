@@ -201,6 +201,7 @@ void AiurModule::onStart()
 	string afterGameFilename;
 	string inGameFilename;
 	string dataFilename;
+	string opponentFilename;
 	string nameEnemy;
 
 
@@ -211,7 +212,7 @@ void AiurModule::onStart()
 	{
 		moodManager->initialize();
 		// There are no IO errors here, but it is just
-		// to avoid wrinting things into the write file
+		// to avoid writing things into the write file
 		// at the end of the game
 		IOErrorOccurred = true;
 	}
@@ -223,11 +224,14 @@ void AiurModule::onStart()
 		/**    for AIIDE / CIG   **/
 		/**************************/
 		// Read/Write data
+
+		// Get the opponent name and transform it in lower case
+		nameEnemy = Broodwar->enemy()->getName();
+		std::transform( nameEnemy.begin(), nameEnemy.end(), nameEnemy.begin(), ::tolower );
+
 		directories.open( (char*)"bwapi-data\\directories.txt", std::ifstream::in );
 		if( directories.is_open() && directories.peek() != std::ifstream::traits_type::eof() )
 		{
-			nameEnemy = Broodwar->enemy()->getName();
-
 			// Read file
 			char pathRead[256];
 			directories >> pathRead;
@@ -240,14 +244,29 @@ void AiurModule::onStart()
 			inGameFilename = pathWrite + nameEnemy + ".txt";
 			//inGameFilename += nameEnemy.substr(0, nameEnemy.find("_"));
 
-			// Epsilon file
-			dataFilename = "bwapi-data\\AI\\data.txt";
+			// Data file
+			string emptyString = "";
+			char pathData[256];
+			directories >> pathData;
+			dataFilename = pathData + emptyString + "data.txt";
+
+			// Opponent file
+			opponentFilename = pathData + emptyString + "learning\\" + nameEnemy + ".txt";
 		}
 		// directories.txt is not open or is empty
 		else
 		{
-			moodManager->initialize();
-			IOErrorOccurred = true;
+			// Read file
+			afterGameFilename = "bwapi-data\\read\\" + nameEnemy + ".txt";
+
+			// Write file
+			inGameFilename = "bwapi-data\\write\\" + nameEnemy + ".txt";
+
+			// Data file
+			dataFilename = "bwapi-data\\AI\\data.txt";
+
+			// Opponent file
+			opponentFilename = "bwapi-data\\AI\\learning\\" + nameEnemy + ".txt";
 		}
 
 		directories.close();
@@ -316,13 +335,14 @@ void AiurModule::onStart()
 				}
 			}
 
-			// take the epsilon value written in the epsilon file
+			// take values written in the data file
 			dataFile.open( (char*)dataFilename.c_str(), std::ifstream::in );
 
 			// If the file is empty
 			if( dataFile.peek() == std::ifstream::traits_type::eof() )
 			{
-				epsilon = 0.1; // default value
+				// default values
+				epsilon = 0.1;
 				numberTrainingGamesPerMood = 3;
 			}
 			else
@@ -331,22 +351,37 @@ void AiurModule::onStart()
 				dataFile >> numberTrainingGamesPerMood;
 			}
 
-			// Pick-up a mood. Change the uniformed distribution after 20 games
-			//if( numberOfGames >= 10 )
-			//{
+			// Pick-up a mood. Change the uniformed distribution after n games
+			opponentFile.open( (char*)opponentFilename.c_str(), std::ifstream::in );
+			if( opponentFile.peek() != std::ifstream::traits_type::eof() )
+			{
+				useOfflineTraining = true;
+				dataOpponent = new int[dataSize];
+
+				int i = 0;
+				while( opponentFile >> dataOpponent[i])
+					++i;
+
+				for( int i = 0; i < dataSizeCopy; ++i )
+					dataGameCopy[i] = dataOpponent[i + dataSizeCopy * shift];
+			}
+			else
+			{
+				useOfflineTraining = false;
 				for( int i = 0; i < dataSizeCopy; ++i )
 					dataGameCopy[i] = dataGame[i + dataSizeCopy * shift];
+			}
+			
 
-				// Try each mood during a fixed number of training games per moods
-				if( numberOfGames >= numberTrainingGamesPerMood * moodManager->getNumberMoods() )
-					moodManager->initialize( dataGameCopy, epsilon );
-				else
-					moodManager->initializeRoundRobin( dataGameCopy, numberTrainingGamesPerMood, epsilon );
-			//}
-			//else
-			//{
-			//	moodManager->initialize( (MoodManager::MoodData::Mood)(numberOfGames % 5) );
-			//}
+			// For off-line training
+			// moodManager->initialize( (MoodManager::MoodData::Mood)(numberOfGames % moodManager->getNumberMoods()) );
+
+			// Try each mood during a fixed number of training games per moods
+			if( numberOfGames >= numberTrainingGamesPerMood * moodManager->getNumberMoods() 
+				|| useOfflineTraining )
+				moodManager->initialize( dataGameCopy, epsilon );
+			else
+				moodManager->initializeRoundRobin( dataGameCopy, numberTrainingGamesPerMood, epsilon );
 		}
 
 		/***********************/
@@ -540,6 +575,13 @@ void AiurModule::onEnd(bool isWinner)
 			delete [] dataGameCopy;
 			delete [] dataGame;
 		}
+
+		if( opponentFile.is_open() )
+		{
+			opponentFile.close();
+			delete [] dataOpponent;
+		}
+
 	}
 
 	log("onEnd(%d)\n",isWinner);
