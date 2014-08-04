@@ -335,20 +335,22 @@ void AiurModule::onStart()
 			}
 
 			// take values written in the data file
-			dataFile.open( (char*)dataFilename.c_str(), std::ifstream::in );
+			//dataFile.open( (char*)dataFilename.c_str(), std::ifstream::in );
 
 			// If the file is empty
-			if( dataFile.peek() == std::ifstream::traits_type::eof() )
-			{
+			//if( dataFile.peek() == std::ifstream::traits_type::eof() )
+			//{
 				// default values
 				epsilon = 0.1;
-				numberTrainingGamesPerMood = 3;
-			}
-			else
-			{
-				dataFile >> epsilon;
-				dataFile >> numberTrainingGamesPerMood;
-			}
+				numberTrainingGamesPerMood = 1;
+				trainingMode = 0;
+			//}
+			//else
+			//{
+			//	dataFile >> epsilon;
+			//	dataFile >> numberTrainingGamesPerMood;
+			//	dataFile >> trainingMode;
+			//}
 
 			// Pick-up a mood. Change the uniformed distribution after n games
 			opponentFile.open( (char*)opponentFilename.c_str(), std::ifstream::in );
@@ -373,14 +375,17 @@ void AiurModule::onStart()
 			
 
 			// For off-line training
-			// moodManager->initialize( (MoodManager::MoodData::Mood)(numberOfGames % moodManager->getNumberMoods()) );
-
-			// Try each mood during a fixed number of training games per moods
-			if( numberOfGames >= numberTrainingGamesPerMood * moodManager->getNumberMoods() 
-				|| useOfflineTraining )
-				moodManager->initialize( dataGameCopy, epsilon );
+			if( trainingMode != 0)
+				moodManager->initialize( (MoodManager::MoodData::Mood)(numberOfGames % moodManager->getNumberMoods()) );
 			else
-				moodManager->initializeRoundRobin( dataGameCopy, numberTrainingGamesPerMood, epsilon );
+			{
+				// Try each mood during a fixed number of training games per moods
+				if( numberOfGames >= numberTrainingGamesPerMood * moodManager->getNumberMoods() 
+					|| useOfflineTraining )
+					moodManager->initialize( dataGameCopy, epsilon );
+				else
+					moodManager->initializeRoundRobin( dataGameCopy, numberTrainingGamesPerMood, epsilon );
+			}
 		}
 
 		/***********************/
@@ -673,7 +678,9 @@ void AiurModule::onFrame()
 	if( debugTimersMode )
 		diffArbitrator = timeArbitrator.GetTimeFromStart();
 
-	if( moodManager->getMood() == MoodManager::MoodData::Cheese && Broodwar->getFrameCount() > 8000 )
+	if( moodManager->getMood() == MoodManager::MoodData::Cheese 
+		&& 
+		( Broodwar->getFrameCount() > 10000 || ( Broodwar->getFrameCount() > 3000 && Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) == 0 ) ) )
 	{
 		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,100);
 		buildOrderManager->build(8,BWAPI::UnitTypes::Protoss_Zealot,95);
@@ -1226,9 +1233,11 @@ void AiurModule::onUnitDestroy(Unit* unit)
 		rushPhotonManager->onRemoveUnit(unit);
 
 	// we rebuild a lost pylon at the same position (except pylon in enemy base)
-	if ( unit->getPlayer() == Broodwar->self() && unit->getType() == UnitTypes::Protoss_Pylon )
+	if( unit->getPlayer() == Broodwar->self() 
+		&& unit->getType() == UnitTypes::Protoss_Pylon
+		&& BWTA::getRegion( unit->getTilePosition() ) != BWTA::getRegion( Broodwar->enemy()->getStartLocation() ) )
 	{
-		buildOrderManager->buildAdditional(1, UnitTypes::Protoss_Pylon, 1000, unit->getTilePosition());
+		buildOrderManager->buildAdditional(1, UnitTypes::Protoss_Pylon, 100, unit->getTilePosition());
 	}
 	// we rebuild a lost photon cannon at the same position
 	//if (unit->getType() == UnitTypes::Protoss_Photon_Cannon)

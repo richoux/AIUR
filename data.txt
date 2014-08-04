@@ -1,2 +1,12 @@
 0.1
 3
+0
+
+### The first value is the epsilon parameter of the 
+### epsilon-greedy mood selection algorithm.
+
+### The second value is the number of times each mood are tried,
+### against a given opponent for each map size, before the on-line learning is considered.
+
+### The third value is a C-style boolean to enable (if different to 0) the off-line
+### training mode. 

@@ -72,6 +72,7 @@ private:
 	int				*dataOpponent;
 	double			epsilon;
 	int				numberTrainingGamesPerMood;
+	int				trainingMode;
 	bool			useOfflineTraining;
 	std::ofstream	inGame;
 	std::ifstream	afterGame;

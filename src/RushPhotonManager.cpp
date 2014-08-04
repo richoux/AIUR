@@ -198,6 +198,26 @@ void RushPhotonManager::onRemoveUnit(Unit* u)
 		rusher = NULL;
 }
 
+void RushPhotonManager::addPoly(BWTA::Polygon &poly, int a, int b)
+{
+	if( a == poly.size() )
+		a = 0;
+
+	if( b == poly.size() )
+		b = 0;
+
+	if( poly[a].getApproxDistance( poly[b] ) > UnitTypes::Protoss_Probe.sightRange() )
+	{
+		int newX = poly[a].x() + ( ( poly[b].x() - poly[a].x() ) / 2 );
+		int newY = poly[a].y() + ( ( poly[b].y() - poly[a].y() ) / 2 );
+
+		poly.insert( poly.begin() + b, Position(newX, newY) );
+
+		addPoly( poly, a, b );
+		addPoly( poly, b, b+1 );
+	}	
+}
+
 Position RushPhotonManager::computeStartingPosition( BWTA::BaseLocation *baseLoc )
 {
 	poly = baseLoc->getRegion()->getPolygon();
@@ -215,6 +235,8 @@ Position RushPhotonManager::computeStartingPosition( BWTA::BaseLocation *baseLoc
 			addY = 1;
 
 		poly[i] = Position( poly[i].x() + ( addX * TILE_SIZE ), poly[i].y() + ( addY * TILE_SIZE ) );
+		if( i > 0 && poly[i-1].getApproxDistance( poly[i] ) > UnitTypes::Protoss_Probe.sightRange() )
+			addPoly(poly, i-1, i);
 	}
 	
 	double maxDistance = 0.0;
@@ -266,6 +288,14 @@ Position RushPhotonManager::computeStartingPosition( BWTA::BaseLocation *baseLoc
 		firstPylonHere = Position( firstPylonHere.x() + x, firstPylonHere.y() + y );
 	
 	return firstPylonHere;
+}
+
+Position RushPhotonManager::computeEntrancePosition( BWTA::BaseLocation *target )
+{
+	if( Broodwar->mapWidth() * TILE_SIZE / 2 - target->getPosition().x() > 0  )
+		return poly.getNearestPoint( ( *target->getRegion()->getChokepoints().rbegin() )->getCenter() );
+	else
+		return poly.getNearestPoint( ( *target->getRegion()->getChokepoints().begin() )->getCenter() );
 }
 
 bool RushPhotonManager::determineIfGoForward( BWTA::BaseLocation *baseLoc, Position start, Position end, int &_sneakyIndex )
@@ -425,7 +455,7 @@ void RushPhotonManager::updateScoutAssignments()
 			baseLocationsExplored.insert( target );
 			informationManager->setEnemyStartLocation( target );
 			startingPosition = computeStartingPosition( target );
-			sneakyPosition = poly.getNearestPoint( ( *target->getRegion()->getChokepoints().rbegin() )->getCenter() );
+			sneakyPosition = computeEntrancePosition( target );
 			rusher->move( sneakyPosition );
 			goForward = determineIfGoForward( target, sneakyPosition, poly.getNearestPoint( startingPosition ), sneakyIndex );
 			return;
@@ -467,7 +497,7 @@ void RushPhotonManager::updateScoutAssignments()
 				baseLocationsExplored.insert( target );
 				informationManager->setEnemyStartLocation( target );
 				startingPosition = computeStartingPosition( target );
-				sneakyPosition = poly.getNearestPoint( ( *target->getRegion()->getChokepoints().rbegin() )->getCenter() );
+				sneakyPosition = computeEntrancePosition( target );
 				rusher->move( sneakyPosition );
 				goForward = determineIfGoForward( target, sneakyPosition, poly.getNearestPoint( startingPosition ), sneakyIndex );
 			}
@@ -561,8 +591,8 @@ void RushPhotonManager::update()
 
 							TilePosition toBuild;
 
-							//if( Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) == 0 )
-							//{
+							if( Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) == 0 )
+							{
 							//	if( Broodwar->self()->minerals() >= 450 )
 							//	{
 							//		// build the first three photons in a row
@@ -575,9 +605,22 @@ void RushPhotonManager::update()
 							//		toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile + xShift*2, yTile + yShift*2 ), UnitTypes::Protoss_Photon_Cannon, 0 );
 							//		rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
 							//	}
-							//}
-							//else
-							//{
+								if( abs( xDirection ) > abs( yDirection ) )
+								{
+									xTile = pylonTile.x();
+									yDirection > 0 ? yTile = pylonTile.y() - 2 : yTile = pylonTile.y() + 2;
+								}
+								else
+								{
+									yTile = pylonTile.y();
+									xDirection > 0 ? xTile = pylonTile.x() - 2 : xTile = pylonTile.x() + 2;
+								}
+							
+								toBuild = buildingPlacer->getBuildLocationNear( TilePosition( xTile, yTile ), UnitTypes::Protoss_Photon_Cannon, 0 );
+								rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
+							}
+							else
+							{
 								switch( ( Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) % 3 ) )
 								{
 								case 2:
@@ -592,7 +635,7 @@ void RushPhotonManager::update()
 								}
 
 								rusher->build( toBuild, UnitTypes::Protoss_Photon_Cannon );
-							//}
+							}
 						}
 					}
 					else if( Broodwar->self()->completedUnitCount( UnitTypes::Protoss_Photon_Cannon ) == Broodwar->self()->allUnitCount( UnitTypes::Protoss_Photon_Cannon ) && 

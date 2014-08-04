@@ -31,6 +31,7 @@
 #include <UnitStates.h>
 #include <BWAPI.h>
 #include <HashMap.h>
+#include <limits>
 
 using namespace BWAPI;
 using namespace std;
@@ -60,9 +61,10 @@ public:
 private:
 	void		updateScoutAssignments	();
 	Position	computeStartingPosition	( BWTA::BaseLocation* );
+	Position	computeEntrancePosition	( BWTA::BaseLocation* );
 	bool		determineIfGoForward	( BWTA::BaseLocation*, Position, Position, int& );
 	Position	nextsneakyPosition		();
-
+	void		addPoly					( BWTA::Polygon&, int, int );
 
 	Arbitrator::Arbitrator<Unit*,double>		*arbitrator;
 	BuildOrderManager							*buildOrderManager;
