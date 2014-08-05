@@ -522,8 +522,12 @@ void ArmyManager::update()
 		// We attack if:
 		// - our DPS is higher than the value starAttack and than enemy's DPS,
 		// - or if we rush
-		// - or if we didn't attack since 20000 frames (which would be weird BTW)
-		if ( ( myDPStoGround() > startAttack && myDPStoGround() > enemyDPStoGround() + 2 ) || (myDPStoGround() >= sizeRush && !firstAttackDone) || BWAPI::Broodwar->getFrameCount() > lastAttack + 18000)
+		// - or if we didn't attack since 18000 frames (which would be weird BTW)
+		// - or we have 200 of population
+		if ( ( myDPStoGround() > startAttack && myDPStoGround() > enemyDPStoGround() + 2 ) 
+			|| (myDPStoGround() >= sizeRush && !firstAttackDone) 
+			|| BWAPI::Broodwar->getFrameCount() > lastAttack + 18000 
+			|| Broodwar->self()->supplyUsed() >= 400 ) // in BWAPI, supply are multiplied by 2
 		{
 			std::set<BWAPI::Unit*> idleDefenders;
 			if (BWAPI::Broodwar->getFrameCount() > lastAttack + 18000)

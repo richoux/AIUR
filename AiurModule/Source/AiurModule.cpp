@@ -1235,7 +1235,8 @@ void AiurModule::onUnitDestroy(Unit* unit)
 	// we rebuild a lost pylon at the same position (except pylon in enemy base)
 	if( unit->getPlayer() == Broodwar->self() 
 		&& unit->getType() == UnitTypes::Protoss_Pylon
-		&& BWTA::getRegion( unit->getTilePosition() ) != BWTA::getRegion( Broodwar->enemy()->getStartLocation() ) )
+		&& ( informationManager->getEnemyStartLocation() == NULL
+		     || BWTA::getRegion( unit->getTilePosition() ) != BWTA::getRegion( informationManager->getEnemyStartLocation()->getTilePosition() ) ) )
 	{
 		buildOrderManager->buildAdditional(1, UnitTypes::Protoss_Pylon, 100, unit->getTilePosition());
 	}

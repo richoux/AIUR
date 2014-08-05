@@ -406,7 +406,7 @@ void SpendManager::update()
 					||
 					( moodManager->getMood() == MoodManager::MoodData::Defensive
 					  && 
-					  Broodwar->getFrameCount() > 10000
+					  Broodwar->getFrameCount() > 12000
 					)
 			      )
 				{
@@ -483,7 +483,7 @@ void SpendManager::update()
 					    ( 
 							moodManager->getMood() == MoodManager::MoodData::Defensive
 							&& 
-							Broodwar->getFrameCount() > 11000 
+							Broodwar->getFrameCount() > 13000 
 						) 
 					) 
 				  )
@@ -546,7 +546,7 @@ void SpendManager::update()
 						buildOrderManager->build(1, UnitTypes::Protoss_Citadel_of_Adun, 60);
 					}
 
-					if( freeGateways.empty() )
+					if( freeGateways.empty() || Broodwar->self()->supplyUsed() >= 300 ) // in BWAPI, supply are multiplied by 2
 					{
 						if( (weaponUpgradeLevel == 1 || Broodwar->self()->isUpgrading(UpgradeTypes::Protoss_Ground_Armor)) && 
 							Broodwar->self()->visibleUnitCount(UnitTypes::Protoss_Templar_Archives) == 0)
@@ -556,7 +556,7 @@ void SpendManager::update()
 
 						//prepare armor upgrade
 						if (armorUpgradeLevel < 3 && 
-							(weaponUpgradeLevel == 3 || weaponUpgradeLevel > armorUpgradeLevel || 
+							(weaponUpgradeLevel > armorUpgradeLevel || 
 							(weaponUpgradeLevel == armorUpgradeLevel && Broodwar->self()->isUpgrading(UpgradeTypes::Protoss_Ground_Weapons))) &&
 							armorUpgradeLevel == 0 && Broodwar->self()->visibleUnitCount(UnitTypes::Protoss_Forge) < 2 && 
 							Broodwar->self()->visibleUnitCount(UnitTypes::Protoss_Cybernetics_Core) > 0)
@@ -584,7 +584,7 @@ void SpendManager::update()
 							&& 
 							gas >= gasStock + UpgradeTypes::Protoss_Ground_Weapons.gasPrice( weaponUpgradeLevel + 1 ) 
 							&& 
-							( freeGateways.empty() || weaponUpgradeLevel == 0 ) )
+							( freeGateways.empty() || weaponUpgradeLevel == 0 || Broodwar->self()->supplyUsed() >= 300 ) )
 						{
 							bat->upgrade( UpgradeTypes::Protoss_Ground_Weapons );
 							minerals = Broodwar->self()->minerals();
@@ -598,7 +598,7 @@ void SpendManager::update()
 							&& 
 							gas >= gasStock + UpgradeTypes::Protoss_Ground_Armor.gasPrice( armorUpgradeLevel + 1 )
 							&&
-							freeGateways.empty() )
+							freeGateways.empty() || Broodwar->self()->supplyUsed() >= 300 )
 						{
 							bat->upgrade(UpgradeTypes::Protoss_Ground_Armor);
 							minerals = Broodwar->self()->minerals();
@@ -614,7 +614,7 @@ void SpendManager::update()
 							&& 
 							gas >= gasStock + UpgradeTypes::Protoss_Plasma_Shields.gasPrice( shieldUpgradeLevel + 1 ) 
 							&&
-							freeGateways.empty() )
+							freeGateways.empty() || Broodwar->self()->supplyUsed() >= 350 )
 						{
 							bat->upgrade(UpgradeTypes::Protoss_Plasma_Shields);
 							minerals = Broodwar->self()->minerals();
