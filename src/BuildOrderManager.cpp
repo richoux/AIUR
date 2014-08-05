@@ -30,8 +30,6 @@
 #include <stdarg.h>
 #include <UnitGroupManager.h>
 
-#define TAKEGAS	5000
-
 using namespace std;
 using namespace BWAPI;
 
@@ -71,6 +69,11 @@ BuildOrderManager::BuildOrderManager(BuildManager* buildManager, TechManager* te
 	{
 		upgrades[i->whatUpgrades()].insert(*i);
 	}
+}
+
+void BuildOrderManager::setTakeGas( int takeGas )
+{
+	this->takeGas = takeGas;
 }
 
 //returns the next frame that the given unit type will be ready to produce units or research tech or upgrades
@@ -605,7 +608,7 @@ void BuildOrderManager::updatePlan()
 					if (t.gasPrice()>BWAPI::Broodwar->self()->gatheredGas()-this->usedGas)
 					{
 						UnitType refinery=Broodwar->self()->getRace().getRefinery();
-						if (this->getPlannedCount(refinery)==0 && BWAPI::Broodwar->getFrameCount() >= TAKEGAS)
+						if (this->getPlannedCount(refinery)==0 && BWAPI::Broodwar->getFrameCount() >= takeGas)
 							this->build(1,refinery,l->first);
 					}
 				}
@@ -617,7 +620,7 @@ void BuildOrderManager::updatePlan()
 					if (u.gasPrice(1)+u.gasPriceFactor()*(BWAPI::Broodwar->self()->getUpgradeLevel(u)-1)>BWAPI::Broodwar->self()->gatheredGas()-this->usedGas)
 					{
 						UnitType refinery=Broodwar->self()->getRace().getRefinery();
-						if (this->getPlannedCount(refinery)==0 && BWAPI::Broodwar->getFrameCount() >= TAKEGAS)
+						if (this->getPlannedCount(refinery)==0 && BWAPI::Broodwar->getFrameCount() >= takeGas)
 							this->build(1,refinery,l->first);
 					}
 					if (i->level>1)
@@ -724,7 +727,7 @@ void BuildOrderManager::updatePlan()
 						if (j->first!=UnitTypes::Zerg_Larva && j->first!=UnitTypes::Zerg_Egg && j->first!=UnitTypes::Zerg_Lurker_Egg && j->first!=UnitTypes::Zerg_Cocoon)
 						{
 							UnitType refinery=Broodwar->self()->getRace().getRefinery();
-							if (this->getPlannedCount(refinery)==0 && BWAPI::Broodwar->getFrameCount() >= TAKEGAS)
+							if (this->getPlannedCount(refinery)==0 && BWAPI::Broodwar->getFrameCount() >= takeGas)
 								this->build(1,refinery,l->first);
 						}
 					}

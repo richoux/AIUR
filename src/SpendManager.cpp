@@ -61,7 +61,6 @@ SpendManager::SpendManager()
 	gas									= 0;
 	mineralStock						= 0;
 	gasStock							= 0;
-	TAKEGAS								= 5000;
 
 	vecBuildings.push_back(UnitTypes::Protoss_Nexus);
 	vecBuildings.push_back(UnitTypes::Protoss_Pylon);
@@ -95,8 +94,6 @@ void SpendManager::setBuildOrderManager(BuildOrderManager *buildOrderManager)
 void SpendManager::setMoodManager(MoodManager *moodManager)
 {
 	this->moodManager = moodManager;
-	if( moodManager->getMood() == MoodManager::MoodData::Defensive )
-		TAKEGAS = 8000;
 }
 
 void SpendManager::setDefenseManager(DefenseManager *defenseManager)
@@ -127,6 +124,11 @@ void SpendManager::setInformationManager(InformationManager *informationManager)
 void SpendManager::setArmyManager(ArmyManager *armyManager)
 {
 	this->armyManager = armyManager;
+}
+
+void SpendManager::setTakeGas( int takeGas )
+{
+	this->takeGas = takeGas;
 }
 
 std::string SpendManager::getName() const
@@ -199,7 +201,8 @@ void SpendManager::needMoreGateways(int factor)
 
 void SpendManager::update()
 {
-	if (Broodwar->getFrameCount() > lastFrameCheck + 24)
+	if( Broodwar->getFrameCount() > lastFrameCheck + 24 
+		&& ( moodManager->getMood() != MoodManager::MoodData::Rush || Broodwar->getFrameCount() > 8000 ) )
 	{
 		lastFrameCheck			= Broodwar->getFrameCount();
 		weaponUpgradeLevel		= Broodwar->self()->getUpgradeLevel(UpgradeTypes::Protoss_Ground_Weapons);
@@ -264,7 +267,7 @@ void SpendManager::update()
 				 && 
 				 buildOrderManager->getPlannedCount( UnitTypes::Protoss_Assimilator ) == 0
 				 &&
-				 Broodwar->getFrameCount() > TAKEGAS )
+				 Broodwar->getFrameCount() > takeGas )
 			{
 				buildOrderManager->build(1, UnitTypes::Protoss_Assimilator, 100);
 				baseManager->setRefineryBuildPriority(30);
@@ -366,9 +369,9 @@ void SpendManager::update()
 				 && 
 				 buildOrderManager->getPlannedCount( UnitTypes::Protoss_Assimilator ) == 0
 				 &&
-				 Broodwar->getFrameCount() > TAKEGAS 
-				 && 
-				 armyManager->getFirstAttackDone())
+				 Broodwar->getFrameCount() > takeGas )
+				 //&& 
+				 //armyManager->getFirstAttackDone())
 			{
 				buildOrderManager->build(1, UnitTypes::Protoss_Assimilator, 100);
 				baseManager->setRefineryBuildPriority(30);

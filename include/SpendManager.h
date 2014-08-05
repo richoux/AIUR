@@ -72,6 +72,7 @@ public:
 	void		setUnderAttackManager	(UnderAttackManager*);
 	void		setBaseManager			(BaseManager*);
 	void		setInformationManager	(InformationManager*);
+	void		setTakeGas				(int);
 	void		update					();
 	std::string getName					() const;
 	std::string getShortName			() const;
@@ -104,7 +105,7 @@ private:
 	int					gas;
 	int					mineralStock;
 	int					gasStock;
-	int					TAKEGAS;
+	int					takeGas;
 
 	std::vector<BWAPI::UnitType>	vecBuildings;
 };

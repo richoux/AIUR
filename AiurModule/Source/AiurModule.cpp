@@ -141,6 +141,7 @@ void AiurModule::onStart()
 	openingManager->setMoodManager			( moodManager );
 	openingManager->setBuildOrderManager	( buildOrderManager );
 	openingManager->setBaseManager			( baseManager );
+	openingManager->setSpendManager			( spendManager );
 
 	dragoonManager->setInformationManager	( informationManager );
 	//dragoonManager->setAttackUnitPlanner	( attackUnitPlanner );
@@ -469,8 +470,8 @@ void AiurModule::onStart()
 	{
 		workerManager->enableAutoBuild();
 		workerManager->setAutoBuildPriority(100);
-		if( moodManager->getMood() != MoodManager::MoodData::Rush )
-			baseManager->setRefineryBuildPriority(30);
+		//if( moodManager->getMood() != MoodManager::MoodData::Rush )
+		baseManager->setRefineryBuildPriority(30);
 	}
 
 	hasSwitchedToDefensive = false;
@@ -685,7 +686,7 @@ void AiurModule::onFrame()
 		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,100);
 		buildOrderManager->build(8,BWAPI::UnitTypes::Protoss_Zealot,95);
 		if( armyManager->myDPStoGround() > 5 )
-			moodManager->setMood( MoodManager::MoodData::Rush );
+			moodManager->setMood( MoodManager::MoodData::Macro );
 		rushPhotonManager->loseControl();
 	}
 
@@ -988,6 +989,10 @@ void AiurModule::onFrame()
 			workerManager->disableAutoBuild();
 		else 
 			workerManager->enableAutoBuild();
+
+		// do not produce too many workers
+		if( ( Broodwar->self()->allUnitCount(UnitTypes::Protoss_Probe) >= 70 ) && workerManager->isAutoBuild() )
+			workerManager->disableAutoBuild();
 
 		if ((Broodwar->self()->allUnitCount(UnitTypes::Protoss_Probe) < 5) && !underAttackManager->isUnderAttack())
 			buildOrderManager->buildAdditional(1,UnitTypes::Protoss_Probe,90);

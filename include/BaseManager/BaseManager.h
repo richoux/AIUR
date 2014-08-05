@@ -40,6 +40,7 @@ public:
 	void				setBuildManager			(BuildManager*);
 	void				setBorderManager		(BorderManager*);
 	void				setMoodManager			(MoodManager*);
+	void				setTakeGas				(int);
 	void				update					();
 	void				resetBases				();
 	void				updateRefineries		();
@@ -74,5 +75,6 @@ private:
 	BWTA::BaseLocation					*lastTakenBaseLocation;
 	int									refineryNeeded;
 	int									refineryBuildPriority;
+	int									takeGas;
 	int									lastFrameCheck;
 };

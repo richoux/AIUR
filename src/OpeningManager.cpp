@@ -33,22 +33,48 @@ void OpeningManager::initialize()
 	switch(mood)
 	{
 	case MoodManager::MoodData::Cheese:
+		buildOrderManager->setTakeGas(5000);
+		baseManager->setTakeGas(5000);
+		spendManager->setTakeGas(5000);
+
 		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Forge,90);
 		break;
 	case MoodManager::MoodData::Rush:
-		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,70);
-		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Zealot,75);
-		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,70);
+		//buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,70);
+		//buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Zealot,75);
+		//buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,70);
+		buildOrderManager->setTakeGas(3000);
+		baseManager->setTakeGas(3000);
+		spendManager->setTakeGas(3000);
+
+		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Pylon,100);
+		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,100);
+		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Cybernetics_Core,100);
+		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Citadel_of_Adun,100);
+		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Templar_Archives,100);
+		buildOrderManager->buildAdditional(1,BWAPI::UnitTypes::Protoss_Gateway,100);
+		buildOrderManager->build(4,BWAPI::UnitTypes::Protoss_Dark_Templar,100);
 		break;
-	case MoodManager::MoodData::Agressive: //like Rush before
+	case MoodManager::MoodData::Agressive:
+		buildOrderManager->setTakeGas(2600);
+		baseManager->setTakeGas(2600);
+		spendManager->setTakeGas(2600);
 		break;
 	case MoodManager::MoodData::Defensive:
+		buildOrderManager->setTakeGas(8000);
+		baseManager->setTakeGas(8000);
+		spendManager->setTakeGas(8000);
+
 		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,70);
 		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Zealot,75);
 		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,75);
 		buildOrderManager->build(12,BWAPI::UnitTypes::Protoss_Zealot,80);
 		break;
 	case MoodManager::MoodData::FastExpo:
+		buildOrderManager->setTakeGas(6000);
+		baseManager->setTakeGas(6000);
+		spendManager->setTakeGas(6000);
+
 		if (BWAPI::Broodwar->mapHash() != hashMap.hash("Andromeda"))
 			baseManager->expand(95);
 		else
@@ -87,6 +113,10 @@ void OpeningManager::initialize()
 		buildOrderManager->build(4,BWAPI::UnitTypes::Protoss_Dragoon,75);
 		break;
 	case MoodManager::MoodData::Macro:
+		buildOrderManager->setTakeGas(5000);
+		baseManager->setTakeGas(5000);
+		spendManager->setTakeGas(5000);
+
 		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,70);
 		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Zealot,75);
 		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,70);
@@ -107,4 +137,9 @@ void OpeningManager::setBuildOrderManager(BuildOrderManager *buildOrderManager)
 void OpeningManager::setBaseManager(BaseManager *baseManager)
 {
 	this->baseManager = baseManager;
+}
+
+void OpeningManager::setSpendManager(SpendManager *spendManager)
+{
+	this->spendManager = spendManager;
 }

@@ -25,6 +25,7 @@
 #include <BuildOrderManager.h>
 #include <BaseManager.h>
 #include <MoodManager.h>
+#include <SpendManager.h>
 #include <HashMap.h>
 
 class OpeningManager
@@ -35,11 +36,13 @@ public:
 	void setMoodManager			(MoodManager*);
 	void setBuildOrderManager	(BuildOrderManager*);
 	void setBaseManager			(BaseManager*);
+	void setSpendManager		(SpendManager*);
 
 private:
 	MoodManager			*moodManager;
 	BuildOrderManager	*buildOrderManager;
 	BaseManager			*baseManager;
+	SpendManager		*spendManager;
 	BWAPI::Race			enemyRace;
 	HashMap				hashMap;
 };

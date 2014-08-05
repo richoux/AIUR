@@ -89,6 +89,7 @@ public:
 
 	BuildOrderManager(BuildManager *, TechManager *, UpgradeManager *, WorkerManager *, SupplyManager *, BaseManager *);
 	void update();
+	void setTakeGas (int);
 	std::string getName() const;
 	void build(int count, BWAPI::UnitType t, int priority, BWAPI::TilePosition seedPosition=BWAPI::TilePositions::None);
 	void buildAdditional(int count, BWAPI::UnitType t, int priority, BWAPI::TilePosition seedPosition=BWAPI::TilePositions::None);
@@ -155,4 +156,5 @@ private:
 	bool isGasLimited;
 	bool debugMode;
 	int nextUpdateFrame;
+	int takeGas;
 };

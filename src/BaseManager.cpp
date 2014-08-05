@@ -25,7 +25,6 @@
 #include <BorderManager.h>
 #include <BuildingPlacer.h>
 
-#define TAKEGAS	5000
 
 BaseManager::BaseManager()
 {
@@ -55,6 +54,11 @@ void BaseManager::setMoodManager(MoodManager* moodManager)
 void BaseManager::setBorderManager(BorderManager* borderManager)
 {
 	this->borderManager = borderManager;
+}
+
+void BaseManager::setTakeGas( int takeGas )
+{
+	this->takeGas = takeGas;
 }
 
 void BaseManager::update()
@@ -193,12 +197,12 @@ void BaseManager::updateRefineries()
 
 bool BaseManager::isRefineryNeeded()
 {
-	return (BWAPI::Broodwar->getFrameCount() >= TAKEGAS && this->refineryNeeded > this->builder->getPlannedCount(BWAPI::Broodwar->self()->getRace().getRefinery()));
+	return (BWAPI::Broodwar->getFrameCount() >= takeGas && this->refineryNeeded > this->builder->getPlannedCount(BWAPI::Broodwar->self()->getRace().getRefinery()));
 }
 
 void BaseManager::setRefineryBuildPriority(int priority)
 {
-	if( refineryBuildPriority == 0 && BWAPI::Broodwar->getFrameCount() > TAKEGAS )
+	if( refineryBuildPriority == 0 && BWAPI::Broodwar->getFrameCount() > takeGas )
 		refineryNeeded = allBases.size();
 
 	refineryBuildPriority = priority;
@@ -344,7 +348,7 @@ BWTA::BaseLocation* BaseManager::expand(BWTA::BaseLocation* location, int priori
 		this->refineryNeeded++;
 		const std::set<BWAPI::Unit*> closestGeyser = location->getGeysers();
 
-		if (BWAPI::Broodwar->getFrameCount() >= TAKEGAS && !(this->hasRefinery(location)) && this->refineryBuildPriority != 0)
+		if (BWAPI::Broodwar->getFrameCount() >= takeGas && !(this->hasRefinery(location)) && this->refineryBuildPriority != 0)
 			this->builder->buildAdditional(1,BWAPI::Broodwar->self()->getRace().getRefinery(),priority, (*closestGeyser.begin())->getTilePosition());
 	}
 	return location;
