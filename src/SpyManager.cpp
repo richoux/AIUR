@@ -97,7 +97,8 @@ void SpyManager::buildObserver(bool force)
 
 		//build an observer
 		int observerCount = BWAPI::Broodwar->self()->allUnitCount(BWAPI::UnitTypes::Protoss_Observer);
-		buildOrderManager->build(observerCount+1, BWAPI::UnitTypes::Protoss_Observer, 70);
+		if( observerCount < 6)
+			buildOrderManager->build(observerCount+1, BWAPI::UnitTypes::Protoss_Observer, 70);
 	}
 }
 

@@ -360,7 +360,7 @@ void DropZealotsManager::update()
 	if( !askForGas && 
 		Broodwar->self()->minerals() >= 80 + mineralStock && 
 		//Broodwar->self()->allUnitCount( UnitTypes::Protoss_Gateway ) == 1 &&
-		Broodwar->getFrameCount() >= 2800 &&
+		Broodwar->getFrameCount() >= 2600 &&
 		Broodwar->self()->allUnitCount( UnitTypes::Protoss_Assimilator ) < 1 )
 	{
 		buildOrderManager->build( 1, UnitTypes::Protoss_Assimilator, 90 );

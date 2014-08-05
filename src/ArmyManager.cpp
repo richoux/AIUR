@@ -116,13 +116,13 @@ void ArmyManager::initialize()
 	firstAttackDone = moodManager->getFirstAttackDone();
 
 	// if the enemy is Zerg, let's have 75% to rush him (if we don't FE).
-	if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Zerg && moodManager->getFirstAttackDone() && mood != MoodManager::MoodData::FastExpo)
-	{
-		if ( randomEarlyAttack->nextInt() < 75 )
-			firstAttackDone = false;
-		else
-			firstAttackDone = true;
-	}
+	//if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Zerg && moodManager->getFirstAttackDone() && mood != MoodManager::MoodData::FastExpo)
+	//{
+	//	if ( randomEarlyAttack->nextInt() < 75 )
+	//		firstAttackDone = false;
+	//	else
+	//		firstAttackDone = true;
+	//}
 
 	startAttackInitial = startAttack = moodManager->getStartAttack();
 	initialized			= true;
@@ -466,8 +466,8 @@ void ArmyManager::setLastExpandFrame(int lastExpandFrame)
 void ArmyManager::update()
 {
 	// after 6500 frames, no rush
-	if (BWAPI::Broodwar->getFrameCount() > 6500 && !firstAttackDone)
-		firstAttackDone = true;
+	//if (BWAPI::Broodwar->getFrameCount() > 6500 && !firstAttackDone)
+	//	firstAttackDone = true;
 
 	// if we have change our mood, we must change the startAttack value
 	if( startAttackInitial != moodManager->getStartAttack() )
@@ -504,10 +504,10 @@ void ArmyManager::update()
 	{
 		lastFrameCheck = BWAPI::Broodwar->getFrameCount();
 
-		if (!firstAttackDone && sizeRush == 0.0)
-		{
-			sizeRush = 0.7 + (((double)randomSizeRush->nextInt()) / 10);
-		}
+		//if (!firstAttackDone && sizeRush == 0.0)
+		//{
+		//	sizeRush = 0.7 + (((double)randomSizeRush->nextInt()) / 10);
+		//}
 
 		if( BWAPI::Broodwar->self()->completedUnitCount( UnitTypes::Protoss_Shuttle ) == 1 && dropPosition == NULL )
 		{
@@ -582,23 +582,36 @@ void ArmyManager::update()
 		BWAPI::Position pos = informationManager->getEnemyStartLocation()->getPosition();
 		if (myDPStoGround() >= sizeRush && !firstAttackDone && !company.empty())
 		{
-			if (BWAPI::Broodwar->enemy()->getRace() != BWAPI::Races::Protoss || informationManager->getNumberBaseCenters() > 1)
-			{
+			//if( BWAPI::Broodwar->enemy()->getRace() != BWAPI::Races::Protoss || informationManager->getNumberBaseCenters() > 1)
+			//{
 				// attack natural first (if it doesn't exist, units will attack the main)
-				if (informationManager->getEnemyNatural() == NULL)
-					informationManager->computeEnemyNatural();
-				BWTA::BaseLocation *natural = informationManager->getEnemyNatural();
+			    // DISABLED AIUR v2.2 
+				//if (informationManager->getEnemyNatural() == NULL)
+				//	informationManager->computeEnemyNatural();
+				//BWTA::BaseLocation *natural = informationManager->getEnemyNatural();
 
-				if (natural != NULL)
-					pos = natural->getPosition();
+				//if (natural != NULL)
+				//	pos = natural->getPosition();
 
-				for(std::map<BWAPI::Unit*,ArmyManager::ArmyData>::iterator it = company.begin(); it != company.end(); ++it)
+				//for(std::map<BWAPI::Unit*,ArmyManager::ArmyData>::iterator it = company.begin(); it != company.end(); ++it)
+				//{
+				//	it->first->move(pos);
+				//	unitStates->setState( it->first, UnitStates::Moving );
+				//	it->second.target = natural;
+				//}
+
+				if( informationManager->getEnemyStartLocation() != NULL )
 				{
-					it->first->move(pos);
-					unitStates->setState( it->first, UnitStates::Moving );
-					it->second.target = natural;
+					pos = informationManager->getEnemyStartLocation()->getPosition();
+
+					for(std::map<BWAPI::Unit*,ArmyManager::ArmyData>::iterator it = company.begin(); it != company.end(); ++it)
+					{
+						it->first->attack(pos);
+						unitStates->setState( it->first, UnitStates::Moving );
+					}
 				}
-			}
+
+			//}
 			firstAttackDone = true;
 		}
 

@@ -206,7 +206,7 @@ void MoodManager::update()
 		moodData.mood != MoodManager::MoodData::Cheese && 
 		( lastFrameCheck == 0 || ( BWAPI::Broodwar->getFrameCount() > lastFrameCheck + 72 ) ) )
 	{
-		if (moodData.mood == MoodManager::MoodData::Defensive && BWAPI::Broodwar->getFrameCount() < 13000)
+		if( moodData.mood == MoodManager::MoodData::Defensive && BWAPI::Broodwar->getFrameCount() < 13000 )
 		{
 			if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss)
 			{

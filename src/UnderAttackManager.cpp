@@ -170,11 +170,11 @@ void UnderAttackManager::update()
 					{
 						std::set<BWAPI::Unit*>::iterator it = myCoWorkers.begin();
 						
-						int helpers;
-						if( moodManager->getMood() == MoodManager::MoodData::Cheese)
-							helpers = 1;
-						else
-							helpers = 3;
+						int helpers = 1;
+						//if( moodManager->getMood() == MoodManager::MoodData::Cheese)
+						//	helpers = 1;
+						//else
+						//	helpers = 3;
 
 						for (int i = 0; i < helpers && it != myCoWorkers.end(); i++)
 						{
