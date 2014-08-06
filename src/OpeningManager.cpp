@@ -40,19 +40,15 @@ void OpeningManager::initialize()
 		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Forge,90);
 		break;
 	case MoodManager::MoodData::Rush:
-		//buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,70);
-		//buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Zealot,75);
-		//buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,70);
-		buildOrderManager->setTakeGas(3000);
-		baseManager->setTakeGas(3000);
-		spendManager->setTakeGas(3000);
+		buildOrderManager->setTakeGas(2500);
+		baseManager->setTakeGas(2500);
+		spendManager->setTakeGas(2500);
 
-		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Pylon,100);
-		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,100);
-		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Cybernetics_Core,100);
-		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Citadel_of_Adun,100);
-		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Templar_Archives,100);
-		buildOrderManager->buildAdditional(1,BWAPI::UnitTypes::Protoss_Gateway,100);
+		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Gateway,70);
+		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Cybernetics_Core,70);
+		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Citadel_of_Adun,70);
+		buildOrderManager->build(1,BWAPI::UnitTypes::Protoss_Templar_Archives,70);
+		buildOrderManager->build(2,BWAPI::UnitTypes::Protoss_Gateway,69);
 		buildOrderManager->build(4,BWAPI::UnitTypes::Protoss_Dark_Templar,100);
 		break;
 	case MoodManager::MoodData::Agressive:

@@ -68,7 +68,7 @@ void SpyManager::onOffer(std::set<BWAPI::Unit*> units)
 {
 	for each (BWAPI::Unit *unit in units)
 	{
-		if (spies.find(unit) == spies.end() && obsDefenders.find(unit) == obsDefenders.end())
+		if (spies.find(unit) == spies.end() )//&& obsDefenders.find(unit) == obsDefenders.end())
 		{
 			arbitrator->accept(this, unit);
 			SpyData temp;

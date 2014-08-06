@@ -642,7 +642,7 @@ void ArmyManager::update()
 					{
 						if(	it->first->getLoadedUnits().size() == 0 && dropPosition != NULL )
 						{
-							it->first->move( baseManager->getLastTakenBaseLocation()->getPosition() );
+							it->first->attack( baseManager->getLastTakenBaseLocation()->getPosition() );
 							unitStates->setState( it->first, UnitStates::Idle );
 							arbitrator->removeBid( this, it->first );
 						}
@@ -686,19 +686,19 @@ void ArmyManager::update()
 				}
 
 				// if *it belongs to the rush squad, attack the natural (if any) and then the main, aiming workers
-				if (arbitrator->getBid(this, it->first) == 40 && firstAttackDone)
+				if( arbitrator->getBid(this, it->first) == 40 && firstAttackDone)
 				{
 					// If the enemy army is too big, flee courageously!
-					if( unitStates->isState( it->first, UnitStates::Moving ) || 
-						unitStates->isState( it->first, UnitStates::Attacking ) )
-					{
-						if ((double)myHP(company) / enemyDPS() < (double)enemyHP() / myDPS(company) && it->first->exists())
-						{
-							BWAPI::Position myPosition(BWAPI::Broodwar->self()->getStartLocation());
-							it->first->move( baseManager->getLastTakenBaseLocation()->getPosition() );
-							unitStates->setState( it->first, UnitStates::Fleeing );
-							it->second.target = baseManager->getLastTakenBaseLocation();
-						}
+					//if( unitStates->isState( it->first, UnitStates::Moving ) || 
+					//	unitStates->isState( it->first, UnitStates::Attacking ) )
+					//{
+						//if ((double)myHP(company) / enemyDPS() < (double)enemyHP() / myDPS(company) && it->first->exists())
+						//{
+						//	BWAPI::Position myPosition(BWAPI::Broodwar->self()->getStartLocation());
+						//	it->first->move( baseManager->getLastTakenBaseLocation()->getPosition() );
+						//	unitStates->setState( it->first, UnitStates::Fleeing );
+						//	it->second.target = baseManager->getLastTakenBaseLocation();
+						//}
 						//else if (!it->first->isAttacking())
 						//{
 						//	std::set<BWAPI::Unit*> aroundMe = it->first->getUnitsInRadius(it->first->getType().sightRange());
@@ -708,7 +708,7 @@ void ArmyManager::update()
 						//			it->first->attack(am);
 						//	}
 						//}
-					}
+					//}
 
 					BWAPI::Position positionToAttack = informationManager->getEnemyStartLocation()->getPosition();
 
@@ -786,7 +786,7 @@ void ArmyManager::update()
 							// For dragoons micro
 							if( it->first->getType() != BWAPI::UnitTypes::Protoss_Dragoon || dragoonManager->availableToAttack(it->first) )
 							{
-								it->first->move( informationManager->getEnemyNatural()->getPosition() );
+								it->first->attack( informationManager->getEnemyNatural()->getPosition() );
 								unitStates->setState( it->first, UnitStates::Moving );
 								it->second.target = informationManager->getEnemyNatural();
 							}
@@ -798,7 +798,7 @@ void ArmyManager::update()
 							if( it->first->getType() != BWAPI::UnitTypes::Protoss_Dragoon || dragoonManager->availableToAttack(it->first) )
 
 							{
-								it->first->move( positionToAttack );
+								it->first->attack( positionToAttack );
 								unitStates->setState( it->first, UnitStates::Moving );
 								it->second.target = informationManager->getEnemyStartLocation();
 							}
@@ -855,7 +855,7 @@ void ArmyManager::update()
 
 					// hit enemy units first
 					UnitGroup enemies = SelectAllEnemy().inRadius( 2 * TILE_SIZE * Broodwar->self()->sightRange( it->first->getType() ), it->first->getPosition() );
-					UnitGroup units = enemies.inRadius( it->first->getType().seekRange(), it->first->getPosition() ).not(isBuilding);
+					UnitGroup units = enemies.inRadius( it->first->getType().seekRange(), it->first->getPosition() )(isDetected).not(isBuilding);
 					UnitGroup airUnits = units(isFlyer);
 					UnitGroup groundUnits = units.not(isFlyer);
 					if( ( !airUnits.empty() && it->first->getType().maxAirHits() > 0 ) 
@@ -870,7 +870,8 @@ void ArmyManager::update()
 
 					// focus on pylons
 					if( Broodwar->enemy()->getRace() == Races::Protoss && 
-						( unitStates->isState( it->first, UnitStates::Moving ) || unitStates->isState( it->first, UnitStates::Attacking ) ) )
+						//( unitStates->isState( it->first, UnitStates::Moving ) || 
+						unitStates->isState( it->first, UnitStates::Attacking ) ) //)
 					{
 						UnitGroup pylons = enemies( UnitTypes::Protoss_Pylon );
 						if( !pylons.empty() )

@@ -251,7 +251,12 @@ void UnderAttackManager::update()
 
 					set<BWAPI::Unit*> attackers = ArmyManager::whoIsAttacking(u);
 
-					if (it->second.mode == UAData::Defender)
+					if( it->second.mode == UAData::Defender
+						&& ( moodManager->getMood() != MoodManager::MoodData::Rush 
+						     ||
+							 it->first->getType() != BWAPI::UnitTypes::Protoss_Dark_Templar
+							 ||
+							 Broodwar->getFrameCount() > 9000 ) )
 					{
 						// For dragoons micro
 						if( it->first->getType() != BWAPI::UnitTypes::Protoss_Dragoon || dragoonManager->availableToAttack(it->first) )

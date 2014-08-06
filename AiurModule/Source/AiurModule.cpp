@@ -342,7 +342,7 @@ void AiurModule::onStart()
 			//if( dataFile.peek() == std::ifstream::traits_type::eof() )
 			//{
 				// default values
-				epsilon = 0.1;
+				epsilon = 0.06;
 				numberTrainingGamesPerMood = 1;
 				trainingMode = 0;
 			//}
@@ -1119,6 +1119,14 @@ void AiurModule::onFrame()
 				BWAPI::Position uPos = u->getPosition();
 				BWAPI::Position tPos = u->getOrderTarget()->getPosition();
 				BWAPI::Broodwar->drawLineMap(uPos.x(), uPos.y(), tPos.x(), tPos.y(), BWAPI::Colors::Red);
+			}
+
+		for each( BWAPI::Unit *u in SelectAll()(isMoving) )
+			if( u != NULL && u->getOrderTarget() != NULL )
+			{
+				BWAPI::Position uPos = u->getPosition();
+				BWAPI::Position tPos = u->getOrderTarget()->getPosition();
+				BWAPI::Broodwar->drawLineMap(uPos.x(), uPos.y(), tPos.x(), tPos.y(), BWAPI::Colors::White);
 			}
 	}
 

@@ -175,10 +175,10 @@ void MoodManager::setMoodPlan()
 		startAttack = 999;
 		break;
 	case MoodManager::MoodData::Rush:
-		if( BWAPI::Broodwar->getFrameCount() < 6500 )
+		//if( BWAPI::Broodwar->getFrameCount() < 6500 )
+		//	firstAttackDone = false;
+		//else
 			firstAttackDone = false;
-		else
-			firstAttackDone = true;
 		startAttack = 5;
 		break;
 	case MoodManager::MoodData::Agressive:
