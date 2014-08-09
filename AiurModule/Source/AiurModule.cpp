@@ -219,7 +219,6 @@ void AiurModule::onStart()
 	}
 	else
 	{
-
 		/**************************/
 		/**   Persistent files   **/
 		/**    for AIIDE / CIG   **/
