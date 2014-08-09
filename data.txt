@@ -1,5 +1,5 @@
-0.1
-3
+0.06
+1
 0
 
 ### The first value is the epsilon parameter of the 
